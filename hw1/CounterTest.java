@@ -40,6 +40,10 @@ public class CounterTest extends TestCase {
 
 	public void testReset() {
 		System.out.println("Checking Reset");
+    counter.reset();
+    counter2.reset();
+    assertEquals(1, counter.getCount());
+    assertEquals(1, counter2.getCount());
 		/* TODO: write a test the verifies Reset */
 	}
 
@@ -55,6 +59,8 @@ public class CounterTest extends TestCase {
 			counter.decrement();
 			counter2.decrement();
 		}
+    assertEquals(0, counter.getCount());
+    assertEquals(0, counter2.getCount());
 		/* TODO: write a test that verifies the proper values of
 			 counter and counter2  */
 	}
