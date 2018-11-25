@@ -1,0 +1,25 @@
+1. What command line is used to create the javadoc documentation in HW1/doc?
+javadoc
+
+2. What command-line flag is used to to create the author and version entries for the class
+-tag
+
+3. Tell us if the following properly run unit tests
+	java -cp '.:/usr/share/java/junit4.jar'  org.junit.runner.JUnitCore CounterTest	
+	java -cp '.:/usr/share/java/*'  org.junit.runner.JUnitCore CounterTest	
+	java -cp '.:/usr/share/java'  org.junit.runner.JUnitCore CounterTest	
+	java -cp '.:/usr/share/java/junit4.jar'  JUnitCore CounterTest	
+	java -cp '.:/usr/share/java/junit.jar'  JUnitCore CounterTest	
+
+4. -cp and -classpath are “command-line switches” to the java and javac command to set Java’s classpath. What is another way to set the classpath without using a command-line switch? (
+
+
+5. Why must the main method of a java program be declared static?
+
+6. Suppose you are given a program in the current directory called a.out, Assume that the PATH environment variable has contents /bin:/usr/local/bin:/usr/bin,  give command lines to do the following 
+	a. execute a.out and redirect standard error (stderr) to a file called "outerr.log" 
+	b. execute a.out and redirect stdout and stderr to a file named "combined.log" 
+ 
+
+
+
