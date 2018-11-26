@@ -11,16 +11,25 @@ import java.io.IOException;
 class ReverseArray {
     private static String[] lineArr = new String[100];
     private static int lineCount = 0;
+    private static FileReader reader = null;
 
     public static void main(String[] args) throws IOException {
+        ReverseArray reverser = new ReverseArray();
+        reverser.readFile(args);
+        reverser.getLines();
+        reverser.printReversed();
+    }
+
+    private void readFile(String[] args) {
         if (args.length == 0) System.err.println("No file provided");
-        FileReader reader = null;
         try {
             reader = new FileReader(args[0]);
         } catch (FileNotFoundException fe) {
-            System.out.println("File not found");
+            System.err.println("File not found");
         }
+    }
 
+    private void getLines() throws IOException {
         int x;
         char currChar;
         String currLine = "";
@@ -43,7 +52,9 @@ class ReverseArray {
                 lineCount++;
             }
         }
+    }
 
+    private void printReversed() {
         int i = lineArr.length - 1;
         while (i >= 0) {
             if (lineArr[i] != null) System.out.println(lineArr[i]);
