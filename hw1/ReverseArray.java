@@ -30,7 +30,7 @@ class ReverseArray {
             currChar = (char) x;
             if (currChar != '\n') currLine += currChar;
             else {
-                if (lineCount > lineArr.length) {
+                if (lineCount >= lineArr.length) {
                     int oldLength = lineArr.length;
                     int newLength = oldLength+100;
                     tempArr = new String[newLength];
@@ -38,7 +38,6 @@ class ReverseArray {
                     lineArr = new String[newLength];
                     System.arraycopy(tempArr, 0, lineArr, 0, oldLength);
                 }
-
                 lineArr[lineCount] = currLine;
                 currLine = "";
                 lineCount++;
