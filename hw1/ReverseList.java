@@ -33,7 +33,6 @@ class ReverseList {
         int x;
         char currChar;
         String currLine = "";
-
         while ((x = reader.read()) != -1) {
             currChar = (char) x;
             if (currChar != '\n') currLine += currChar;
@@ -46,7 +45,6 @@ class ReverseList {
 
     private void printReversed() {
         Iterator it = lineList.iterator();
-
         while(it.hasNext()) {
             System.out.println(it.next());
         }

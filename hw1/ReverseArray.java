@@ -34,7 +34,6 @@ class ReverseArray {
         char currChar;
         String currLine = "";
         String[] tempArr;
-
         while ((x = reader.read()) != -1) {
             currChar = (char) x;
             if (currChar != '\n') currLine += currChar;

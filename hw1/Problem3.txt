@@ -1,0 +1,39 @@
+1. F- An instance variable declared as private can be seen only by the class in which it
+was declared and all its sub classes
+2. F- If a class C is declared as abstract, then private C myC = new C(); is valid.
+3. F- A variable declared as static cannot ever be modified, once it has been declared
+and initialized.
+4. T- The following is a legal statement: double x = 5;
+5. T- Code that does not explicitly handle checked exceptions, results in a compilation
+error.
+6. F- The declaration FilledOval[][] A = new FilledOval[20][30]; creates 600 FilledOval
+instances using the FilledOval() constuctor.
+7. T F A class that uses the Swing toolkit and wants to both display and be notified of
+changes to a JSlider must implement the ActionListener interface.
+8. T- method declarations void A(double x, integer k){}; and void A(integer k, double x) {}; have identical signatures
+9. T- The binary search algorithm will work properly on all integer arrays.
+10. T- if X is any valid, defined java object, then Object tmp=X; is a valid statement.
+11. F- (“Give me Liberty”.split(“ “).length) evaluates to 3
+12. T- “”.format(“%d %s\n”,14, “shopping days left”); is a valid
+statementt.
+13. F- If the following statements are the only two statements in a method,
+String X = “thing one”; and String Y = ”thing one”; then
+X.equals(Y) evaluates to true, but X == Y evaluates to false within that method.
+14. F- A class declared as final cannot be inherited via the extends keyword.
+15. F- consider the statement: String S = “Out of Gas”; then the statement:
+S[7] = 'g'; will change “Gas” to “gas”.
+16. F- boolean primitive variables can only be assigned values: true, false, or null.
+17. F- You can index into an array with a variable of type double as long as the there are
+no digits past the decimal point.
+18. T- The constructor of the super class is only called when the constructor of the sub
+class explicitly calls super(); as its first line.
+19. T- Any for loop can be rewritten using a while loop.
+20. T- It is legal to define more than one class in a java source file.
+21. T- A class can implement multiple interfaces
+22. F- int i = Math.sqrt(4.0); is a valid statement.
+23. F- the protected keyword can only be applied to instance variables.
+24. T- Consider the statement: throw new IllegalArgumentException();
+This always causes the program to immediately exit.
+25. F- Suppose you have the following declaration: int xyz = 4; Then, in the body
+of a switch statement block case xyz: System.out.println(“4”); break; is legal.
+
