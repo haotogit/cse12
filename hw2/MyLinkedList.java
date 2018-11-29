@@ -5,26 +5,27 @@
 import java.util.*;
 
 public class MyLinkedList<E> extends AbstractList<E>  {
-    private int length = 0;
-    // creating this to reference what type of list this
-    // in order to check which type's allowed when adding. right ?
-    private MyLinkedList thisList;
+    private int size = 0;
+    private Node head;
+    private Node tail;
 
     protected class Node {
         E data;
         Node next;
         Node prev;
-        // TODO - your code here
+
+        public Node(E val) {
+            data = val;
+        }
     }
 
-    public MyLinkedList<E> MyLinkedList() {
-        Node head = new Node();
-        head.data = null;
-        Node tail = new Node();
-        tail.data = null;
-        tail.prev = head;
+    public MyLinkedList() {
+        head = new Node(null);
+        tail = new Node(null);
+        head.prev = null;
         head.next = tail;
-        return new MyLinkedList<E>();
+        tail.prev = head;
+        tail.next = null;
     }
 
     // The following MyListIterator class is called an Inner Class
@@ -98,15 +99,35 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     @Override
     public int size()
     {
-        // need to implement the size method
-        return length; // So skeleton code will compile
+        return size;
+    }
+
+    private Node getNth(int index)
+    {
+        int count = 0;
+        Node temp = head;
+        while(temp != null && count <= index) {
+            temp = temp.next;
+            count++;
+        }
+        return temp;
+    }
+
+    public E get(int index)
+    {
+        return getNth(index).data;
     }
 
     @Override
-    public E get(int index)
-    {
-        // need to implement get  method
-        return (E) null; // So skeleton code will compile
+    public boolean add(E element) {
+        Node newNode = new Node(element);
+        Node last = tail.prev;
+        newNode.prev = last;
+        newNode.next = tail;
+        last.next = newNode;
+        tail.prev = newNode;
+        size++;
+        return true;
     }
 
     public Iterator<E> QQQiterator()
@@ -119,10 +140,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     }
 
     /* retrieve the Node located at the Nth index */
-    private Node getNth(int index)
-    {
-        return null;  // Modify. This is so that skeleton code will compile. 
-    }
+    
 
     /*  UNCOMMENT the following when you believe your MyListIterator class is
         functioning correctly
