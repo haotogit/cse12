@@ -3,6 +3,7 @@
  */
 
 import java.util.*;
+import java.io.*;
 
 public class MyLinkedList<E> extends AbstractList<E>  {
     private int size = 0;
@@ -19,13 +20,79 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         }
     }
 
-    public MyLinkedList() {
+    public MyLinkedList() 
+    {
         head = new Node(null);
         tail = new Node(null);
         head.prev = null;
         head.next = tail;
         tail.prev = head;
         tail.next = null;
+    }
+
+    @Override
+    public int size()
+    {
+        return size;
+    }
+
+    private Node getNth(int index)
+    {
+        int count = 0;
+        Node temp = head;
+        while(temp != null && count <= index) {
+            temp = temp.next;
+            count++;
+        }
+        return temp;
+    }
+
+    public E get(int index)
+    {
+        return getNth(index).data;
+    }
+
+    @Override
+    public boolean add(E el) 
+    {
+        if (el == null) throw new NullPointerException("Can't add null element");
+        Node newNode = new Node(el);
+        Node last = tail.prev;
+        newNode.prev = last;
+        newNode.next = tail;
+        last.next = newNode;
+        tail.prev = newNode;
+        int prevSize = size();
+        size++;
+        return prevSize != size;
+    }
+
+    public void add(int index, E el) 
+    {
+        if (el == null) throw new NullPointerException("Can't add null element");
+        else if (index < 0 || index > size()) throw new IndexOutOfBoundsException();
+        int i = 0;
+        Node temp = head;
+        while(temp != null && i <= index) {
+            temp = temp.next;
+            i++;
+        }
+    }
+
+    public E set(int index, E el)
+    {
+        if (el == null) throw new NullPointerException("Null value not allowed");
+        else if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
+        int i = 0;
+        Node temp = head;
+        while(temp != null && i <= index) {
+            temp = temp.next;
+            i++;
+        }
+
+        E oldData = temp.data;
+        temp.data = el;
+        return oldData;
     }
 
     // The following MyListIterator class is called an Inner Class
@@ -94,42 +161,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
 
     }
 
-    // TODO - Your methods for the MyLinkedList Class 
-
-    @Override
-    public int size()
-    {
-        return size;
-    }
-
-    private Node getNth(int index)
-    {
-        int count = 0;
-        Node temp = head;
-        while(temp != null && count <= index) {
-            temp = temp.next;
-            count++;
-        }
-        return temp;
-    }
-
-    public E get(int index)
-    {
-        return getNth(index).data;
-    }
-
-    @Override
-    public boolean add(E element) {
-        Node newNode = new Node(element);
-        Node last = tail.prev;
-        newNode.prev = last;
-        newNode.next = tail;
-        last.next = newNode;
-        tail.prev = newNode;
-        size++;
-        return true;
-    }
-
     public Iterator<E> QQQiterator()
     {
         return new MyListIterator();
@@ -138,9 +169,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     {
         return new MyListIterator();
     }
-
-    /* retrieve the Node located at the Nth index */
-    
 
     /*  UNCOMMENT the following when you believe your MyListIterator class is
         functioning correctly
