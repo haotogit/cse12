@@ -90,20 +90,13 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         size++;
     }
 
-    public void fuck()
-    {
-        System.out.println(this.head);
-        System.out.println(this.head.next == null);
-        //System.out.println(this.tail);
-        //System.out.println(this.tail.next);
-    }
-
+    @Override
     public E set(int index, E el)
     {
         if (el == null) throw new NullPointerException("Null value not allowed");
         else if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
         int i = 0;
-        Node temp = head;
+        Node temp = this.head;
         while(temp != null && i <= index) {
             temp = temp.next;
             i++;
