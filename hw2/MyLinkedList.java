@@ -16,18 +16,16 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         Node prev;
 
         public Node(E val) {
-            data = val;
+            this.data = val;
         }
     }
 
     public MyLinkedList() 
     {
-        head = new Node(null);
-        tail = new Node(null);
-        head.prev = null;
-        head.next = tail;
-        tail.prev = head;
-        tail.next = null;
+        this.head = new Node(null);
+        this.tail = new Node(null);
+        this.head.next = tail;
+        this.tail.prev = head;
     }
 
     @Override
@@ -39,16 +37,19 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     private Node getNth(int index)
     {
         int count = 0;
-        Node temp = head;
-        while(temp != null && count <= index) {
+        Node temp = this.head;
+        while(temp.next != null && count <= index) {
             temp = temp.next;
             count++;
         }
+
         return temp;
     }
 
+    @Override
     public E get(int index)
     {
+        if (size() == 0) throw new IndexOutOfBoundsException();
         return getNth(index).data;
     }
 
@@ -67,16 +68,34 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         return prevSize != size;
     }
 
+    @Override
     public void add(int index, E el) 
     {
         if (el == null) throw new NullPointerException("Can't add null element");
         else if (index < 0 || index > size()) throw new IndexOutOfBoundsException();
         int i = 0;
-        Node temp = head;
-        while(temp != null && i <= index) {
+        Node temp = this.head;
+        while(temp.next != null && i <= index) {
             temp = temp.next;
             i++;
         }
+
+        Node prev = temp.prev;
+        Node next = temp;
+        Node newNode = new Node(el);
+        newNode.prev = prev;
+        newNode.next = next;
+        next.prev = newNode;
+        prev.next = newNode;
+        size++;
+    }
+
+    public void fuck()
+    {
+        System.out.println(this.head);
+        System.out.println(this.head.next == null);
+        //System.out.println(this.tail);
+        //System.out.println(this.tail.next);
     }
 
     public E set(int index, E el)
