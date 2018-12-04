@@ -28,6 +28,7 @@ public class LinkedListTester extends TestCase
 	private MyLinkedList<Integer> empty ;
 	private MyLinkedList<Integer> one ;
 	private MyLinkedList<Integer> several ;
+	private MyLinkedList<Integer> anotherSeveral;
 	private MyLinkedList<String>  slist ;
 	static final int DIM = 5;
 	static final int FIBMAX = 30;
@@ -45,10 +46,14 @@ public class LinkedListTester extends TestCase
 		empty = new MyLinkedList<Integer>();
 		one = new MyLinkedList<Integer>();
 		one.add(0,new Integer(0));
-		several = new MyLinkedList<Integer>() ;
+		several = new MyLinkedList<Integer>();
+		anotherSeveral = new MyLinkedList<Integer>();
 		// List: 1,2,3,...,Dim
 		for (int i = DIM; i > 0; i--)
 			several.add(0,new Integer(i));
+
+    for (int i = DIM; i > 0; i--)
+			anotherSeveral.add(0,new Integer(i));
 
 		// List: "First","Last"
 		slist = new MyLinkedList<String>();
@@ -100,6 +105,12 @@ public class LinkedListTester extends TestCase
 			//  normal
 		}
 	}
+
+  public void testRemove()
+  {
+      assertEquals("should be first item",new Integer(1),anotherSeveral.remove(0));
+      assertEquals("should be one less",DIM-1,anotherSeveral.size());
+  }
 
 
 	/** Test iterator on empty list and several list */

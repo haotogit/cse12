@@ -107,6 +107,21 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         return oldData;
     }
 
+    public E remove(int index)
+    {
+        if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
+        Node temp = getNth(index); 
+        E tempVal = temp.data;
+        Node prev = temp.prev;
+        Node next = temp.next;
+        prev.next = next;
+        next.prev = prev;
+        temp.prev = null;
+        temp.next = null;
+        size--;
+        return tempVal;
+    }
+
     // The following MyListIterator class is called an Inner Class
     // Because it is "Nested" inside of MyLinkedList
     //      o it has access to all of the MyLinkedList instance variables.  
