@@ -25,7 +25,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         this.head = new Node(null);
         this.tail = new Node(null);
         this.head.next = tail;
+        this.head.prev = null;
         this.tail.prev = head;
+        this.tail.next = null;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     @Override
     public E get(int index)
     {
-        if (size() == 0) throw new IndexOutOfBoundsException();
+        if (size() == 0 && this.head.next == this.tail) throw new IndexOutOfBoundsException();
         return getNth(index).data;
     }
 
@@ -134,7 +136,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     @Override
     public boolean isEmpty()
     {
-        return size() == 0;
+        return size() == 0 && this.head.next == this.tail;
     }
 
     // The following MyListIterator class is called an Inner Class
@@ -145,8 +147,69 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     //        from within a method here use
     //                MyLinkedList.this.set(i,e);
     protected class MyListIterator implements ListIterator<E> {
+        private Node cursor = MyLinkedList.this.head;
+        private boolean currDirection = true;
+        private int currIndex = 0;
 
-        // TODO - your code here
+        private void setDirection(boolean fwd)
+        {
+            boolean oldDirection = this.currDirection;
+            if (fwd && fwd != oldDirection) {
+                this.cursor = MyLinkedList.this.head;
+                currIndex = 0;
+            } else if (!fwd && fwd != oldDirection) {
+                this.cursor = MyLinkedList.this.tail;
+                currIndex = MyLinkedList.this.size() - 1;
+            }
+
+            this.currDirection = fwd;
+        }
+
+        @Override
+        public E next()
+        {
+            if (!hasNext()) throw new NoSuchElementException();
+            this.cursor = this.cursor.next;
+            currIndex++;
+            return this.cursor.data;
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            setDirection(true);
+            return this.cursor.next != null && this.cursor.next != MyLinkedList.this.tail;
+        }
+
+        @Override
+        public int nextIndex()
+        {
+            // need to code the nextIndex method of ListIterators
+            return -1; // So that skeleton code will compile
+        }
+
+        @Override
+        public E previous()
+        {
+            if (!hasPrevious()) throw new NoSuchElementException();
+            this.cursor = this.cursor.prev;
+            currIndex--;
+            return this.cursor.data; // so that skeleton code will compile
+        }
+
+        @Override
+        public boolean hasPrevious()
+        {
+            setDirection(false);
+            return this.cursor.prev != null && this.cursor.prev != MyLinkedList.this.head;
+        }
+
+        @Override
+        public int previousIndex()
+        {
+            // need to code the previousIndex method of ListIterators
+            return -1; // So that skeleton code will compile
+        }
 
         @Override
         public void add(E e)
@@ -154,53 +217,17 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             // need to code the add method of ListIterators 
         }
         @Override
-        public boolean hasNext()
-        {
-            // need to code the hasNext method of ListIterators 
-            return false; // Modify. this is so that skeleton code will compile
-        }
-        @Override
-        public boolean hasPrevious()
-        {
-            // need to code the hasPrevious method of ListIterators 
-            return false; // So that skeleton code will compile
-        }
-        @Override
-        public E next()
-        {
-            // need to code the next method of ListIterators
-            return (E) null; // So that skeleton code will compile
-        }
-        @Override
-        public int nextIndex()
-        {
-            // need to code the nextIndex method of ListIterators
-            return -1; // So that skeleton code will compile
-        }
-        @Override
-        public E previous()
-        {
-            // need to code the previous method of ListIterators
-            return (E) null; // so that skeleton code will compile
-        }
-        @Override
-        public int previousIndex()
-        {
-            // need to code the previousIndex method of ListIterators
-            return -1; // So that skeleton code will compile
-        }
-        @Override
         public void remove()
         {
             // need to code the remove method of ListIterators
         }
+
         @Override
         public void set(E e)
         {
             //
             // need to code the set method of ListIterators
         }
-
     }
 
     public Iterator<E> QQQiterator()
