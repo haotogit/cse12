@@ -184,8 +184,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public int nextIndex()
         {
-            // need to code the nextIndex method of ListIterators
-            return -1; // So that skeleton code will compile
+            return this.currIndex + 1 == MyLinkedList.this.size() ?
+                MyLinkedList.this.size() : this.currIndex + 1;
         }
 
         @Override
@@ -194,7 +194,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             if (!hasPrevious()) throw new NoSuchElementException();
             this.cursor = this.cursor.prev;
             currIndex--;
-            return this.cursor.data; // so that skeleton code will compile
+            return this.cursor.data;
         }
 
         @Override
@@ -207,8 +207,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public int previousIndex()
         {
-            // need to code the previousIndex method of ListIterators
-            return -1; // So that skeleton code will compile
+            return this.currIndex == 0 ? -1 : this.currIndex - 1; 
         }
 
         @Override

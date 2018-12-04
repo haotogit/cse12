@@ -16,8 +16,9 @@ public class Runner {
         
         ListIterator<Integer> iter = list.QQQlistIterator();
 
-        while (iter.hasPrevious()) {
-            System.out.println("next:"+iter.previous());
+        while (iter.hasNext()) {
+            System.out.println("nextPrevIndex:"+iter.nextIndex());
+            System.out.println("next:"+iter.next());
         }
     }
 }
