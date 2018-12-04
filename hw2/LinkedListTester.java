@@ -112,6 +112,17 @@ public class LinkedListTester extends TestCase
       assertEquals("should be one less",DIM-1,anotherSeveral.size());
   }
 
+  public void testClear()
+  {
+      anotherSeveral.clear();
+      assertEquals("should be empty",0,anotherSeveral.size());
+  }
+
+  public void testIsEmpty()
+  {
+      anotherSeveral.clear();
+      assertTrue("should be empty",anotherSeveral.isEmpty());
+  }
 
 	/** Test iterator on empty list and several list */
 	public void testIterator()

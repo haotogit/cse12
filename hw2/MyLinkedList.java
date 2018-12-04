@@ -107,6 +107,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         return oldData;
     }
 
+    @Override
     public E remove(int index)
     {
         if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
@@ -120,6 +121,20 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         temp.next = null;
         size--;
         return tempVal;
+    }
+
+    @Override
+    public void clear()
+    {
+        while (size() != 0) {
+            remove(0);
+        }
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return size() == 0;
     }
 
     // The following MyListIterator class is called an Inner Class
