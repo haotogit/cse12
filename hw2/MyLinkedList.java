@@ -148,18 +148,18 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     //                MyLinkedList.this.set(i,e);
     protected class MyListIterator implements ListIterator<E> {
         private Node cursor = MyLinkedList.this.head;
+        // currDirection starts going forward true = fw;
         private boolean currDirection = true;
         private int currIndex = 0;
+        private justAdded = false;
 
         private void setDirection(boolean fwd)
         {
             boolean oldDirection = this.currDirection;
             if (fwd && fwd != oldDirection) {
                 this.cursor = MyLinkedList.this.head;
-                currIndex = 0;
             } else if (!fwd && fwd != oldDirection) {
                 this.cursor = MyLinkedList.this.tail;
-                currIndex = MyLinkedList.this.size() - 1;
             }
 
             this.currDirection = fwd;
@@ -171,6 +171,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             if (!hasNext()) throw new NoSuchElementException();
             this.cursor = this.cursor.next;
             currIndex++;
+            this.justAdded = false;
             return this.cursor.data;
         }
 
@@ -194,6 +195,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             if (!hasPrevious()) throw new NoSuchElementException();
             this.cursor = this.cursor.prev;
             currIndex--;
+            this.justAdded = false;
             return this.cursor.data;
         }
 
@@ -213,12 +215,19 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public void add(E e)
         {
-            // need to code the add method of ListIterators 
+            // if going forward input element before the next element
+            //
+            // if going backwards input element after the previous
+
+            if (this.currDirection) MyLinkedList.this.add(this.currIndex, e);
+            else MyLinkedList.this.add(this.currIndex+1, e);
+            this.justAdded = true;
         }
         @Override
         public void remove()
         {
-            // need to code the remove method of ListIterators
+            if (this.cursor != MyLinkedList.this.head && !this.justAdded) MyLinkedList.this.remove(this.currIndex);
+            else throw new IllegalStateException();
         }
 
         @Override
