@@ -1,1 +1,1 @@
-CSE12 - Basic Data Struct & OO Design
+CSE12 - Basic Data Struct & OO Design in Java

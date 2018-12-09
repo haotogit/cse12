@@ -151,7 +151,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         // currDirection starts going forward true = fw;
         private boolean currDirection = true;
         private int currIndex = 0;
-        private justAdded = false;
+        private boolean stateChange = false;
+        private Node currNode = null;
 
         private void setDirection(boolean fwd)
         {
@@ -170,8 +171,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         {
             if (!hasNext()) throw new NoSuchElementException();
             this.cursor = this.cursor.next;
-            currIndex++;
-            this.justAdded = false;
+            this.currNode = this.cursor;
+            this.currIndex++;
+            this.stateChange = false;
             return this.cursor.data;
         }
 
@@ -185,7 +187,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public int nextIndex()
         {
-            return this.currIndex + 1 == MyLinkedList.this.size() ?
+            return this.currIndex + 1 >= MyLinkedList.this.size() ?
                 MyLinkedList.this.size() : this.currIndex + 1;
         }
 
@@ -194,8 +196,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         {
             if (!hasPrevious()) throw new NoSuchElementException();
             this.cursor = this.cursor.prev;
-            currIndex--;
-            this.justAdded = false;
+            this.currNode = this.cursor;
+            this.currIndex--;
+            this.stateChange = false;
             return this.cursor.data;
         }
 
@@ -221,13 +224,16 @@ public class MyLinkedList<E> extends AbstractList<E>  {
 
             if (this.currDirection) MyLinkedList.this.add(this.currIndex, e);
             else MyLinkedList.this.add(this.currIndex+1, e);
-            this.justAdded = true;
+            this.stateChange = true;
         }
+
         @Override
         public void remove()
         {
-            if (this.cursor != MyLinkedList.this.head && !this.justAdded) MyLinkedList.this.remove(this.currIndex);
-            else throw new IllegalStateException();
+            if (this.currNode == null || this.stateChange) throw new IllegalStateException();
+            int removalIndex = this.currIndex == 0 ? 0 : this.currIndex - 1;
+            MyLinkedList.this.remove(removalIndex);
+            this.stateChange = true;
         }
 
         @Override

@@ -15,19 +15,23 @@ public class Runner {
         //System.out.println(list.get(2));
         
         ListIterator<Integer> iter = list.QQQlistIterator();
-        System.out.println("starting nextIndex:"+iter.nextIndex());
-        iter.next();
-        System.out.println("after first next nextIndex:"+iter.nextIndex());
-        iter.previous();
-        System.out.println("after previous nextIndex:"+iter.nextIndex());
-        iter.add(15);
-        //System.out.println("size::"+list.size());
+        //iter.previous();
+        //System.out.println("starting nextIndex:"+iter.nextIndex());
 
+        //System.out.println('\n');
+        //while (iter.hasNext()) {
+        //    System.out.println("next:"+iter.next());
+        //}
+        iter.next();
+        //System.out.println("prevIndex"+iter.previousIndex());
+        //System.out.println("nextIndex"+iter.nextIndex());
+        //iter.next();
+        //iter.previous();
+        iter.remove();
         System.out.println('\n');
-        while (iter.hasNext()) {
-            System.out.println("loopNexInt:"+iter.nextIndex());
-            System.out.println("loopNext:"+iter.next());
+        ListIterator<Integer> anotherIter = list.QQQlistIterator();
+        while (anotherIter.hasNext()) {
+            System.out.println("iterrr:"+anotherIter.next());
         }
-        System.out.println("last:"+iter.nextIndex());
     }
 }
