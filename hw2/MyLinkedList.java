@@ -239,8 +239,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public void set(E e)
         {
-            //
-            // need to code the set method of ListIterators
+            if (this.currNode = null || this.stateChange) throw new IllegalStateException();
+            int replaceIndex = this.currIndex == 0 ? 0 : this.currIndex - 1;
+            MyLinkedList.this.set(replaceIndex, e);
         }
     }
 
