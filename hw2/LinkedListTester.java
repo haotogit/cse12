@@ -147,6 +147,8 @@ public class LinkedListTester extends TestCase
 	public void testIteratorFibonacci()
 	{
 
+    //static final int DIM = 5;
+	// static final int FIBMAX = 30;
 		MyLinkedList<Integer> fib  = new MyLinkedList<Integer>();
 		ListIterator<Integer> iter;
 		// List: 0 1 1 2 3 5 8 13 ... 
@@ -158,17 +160,18 @@ public class LinkedListTester extends TestCase
 		{
 			t = p+q;
 			fib.add(k,t);
-			p = q; q = t; 
+			p = q;
+      q = t; 
 		}
 		// Now iterate through the list to near the middle, read the
 		// previous two entries and verify the sum.
 		iter = fib.listIterator();
 		int sum = 0;
-		for (int j = 1; j < FIBMAX/2; j++)
+		for (int j = 0; j < FIBMAX/2; j++)
 			sum = iter.next();
-		iter.previous();
 		assertEquals(iter.previous() + iter.previous(),sum);
 		// Go forward with the list iterator
+    iter.previous();
 		assertEquals(iter.next() + iter.next(),sum);
 	}
 }

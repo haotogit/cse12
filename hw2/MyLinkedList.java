@@ -156,13 +156,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
 
         private void setDirection(boolean fwd)
         {
-            boolean oldDirection = this.currDirection;
-            if (fwd && fwd != oldDirection) {
-                this.cursor = MyLinkedList.this.head;
-            } else if (!fwd && fwd != oldDirection) {
-                this.cursor = MyLinkedList.this.tail;
-            }
-
             this.currDirection = fwd;
         }
 
@@ -222,8 +215,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             //
             // if going backwards input element after the previous
 
-            if (this.currDirection) MyLinkedList.this.add(this.currIndex, e);
-            else MyLinkedList.this.add(this.currIndex+1, e);
+            if (this.currDirection) MyLinkedList.this.add(this.currIndex-1, e);
+            else MyLinkedList.this.add(this.currIndex, e);
             this.stateChange = true;
         }
 
@@ -239,7 +232,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public void set(E e)
         {
-            if (this.currNode = null || this.stateChange) throw new IllegalStateException();
+            if (this.currNode == null || this.stateChange) throw new IllegalStateException();
             int replaceIndex = this.currIndex == 0 ? 0 : this.currIndex - 1;
             MyLinkedList.this.set(replaceIndex, e);
         }
@@ -254,8 +247,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         return new MyListIterator();
     }
 
-    /*  UNCOMMENT the following when you believe your MyListIterator class is
-        functioning correctly
+    //UNCOMMENT the following when you believe your MyListIterator class is
         public Iterator<E> iterator()
         {
         return new MyListIterator();
@@ -264,7 +256,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         {
         return new MyListIterator();
         }
-        */
 }
 // VIM: set the tabstop and shiftwidth to 4 
 // vim:tw=78:ts=4:et:sw=4
