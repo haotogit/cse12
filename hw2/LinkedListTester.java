@@ -167,11 +167,11 @@ public class LinkedListTester extends TestCase
 		// previous two entries and verify the sum.
 		iter = fib.listIterator();
 		int sum = 0;
-		for (int j = 0; j < FIBMAX/2; j++)
+		for (int j = 1; j < FIBMAX/2; j++)
 			sum = iter.next();
 		assertEquals(iter.previous() + iter.previous(),sum);
-		// Go forward with the list iterator
     iter.previous();
+		// Go forward with the list iterator
 		assertEquals(iter.next() + iter.next(),sum);
 	}
 }

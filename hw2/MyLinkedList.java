@@ -156,6 +156,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
 
         private void setDirection(boolean fwd)
         {
+            // if this.currDirection then going forwards
+            // else going backwards
             this.currDirection = fwd;
         }
 

@@ -43,7 +43,7 @@ public class Runner {
         int t, p = 0, q = 1;
         fib.add(0,p);
         fib.add(1,q);
-        for (int k = 2; k <= FIBMAX; k++)
+        for (int k = 2; k < FIBMAX; k++)
         {
             t = p+q;
             fib.add(k,t);
@@ -54,14 +54,15 @@ public class Runner {
         // previous two entries and verify the sum.
         iter = fib.listIterator();
         int sum = 0;
-        for (int j = 0; j < FIBMAX/2; j++) {
+        for (int j = 1; j < FIBMAX/2; j++) {
             sum = iter.next();
-            System.out.println("loop: "+sum);
         }
-
-
-        while (iter.hasNext()) {
-            System.out.println("lastloop"+iter.next());
-        }
+        System.out.println("SUM:"+sum);
+        System.out.println("previous:"+iter.previous());
+        System.out.println("previousPrevious:"+iter.previous());
+        //System.out.println("index?"+iter.nextIndex());
+        //while (iter.hasNext()) {
+        //    System.out.println("next::"+iter.next());
+        //}
     }
 }
