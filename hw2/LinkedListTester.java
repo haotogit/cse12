@@ -174,4 +174,24 @@ public class LinkedListTester extends TestCase
 		// Go forward with the list iterator
 		assertEquals(iter.next() + iter.next(),sum);
 	}
+
+  public void testPrevNextIndexes()
+  {
+      int listSize = 100;
+      MyLinkedList<Integer> nummerz = new MyLinkedList<Integer>();
+      for (int i = 0; i < listSize; i++)
+      {
+          nummerz.add(i);
+      }
+
+      ListIterator<Integer> nummzz = nummerz.listIterator();
+
+      for (int j = 0; j < listSize/2; j++)
+      {
+        nummzz.next();
+      }
+
+      assertEquals(listSize/2 - 2, nummzz.previousIndex());
+      assertEquals(listSize/2, nummzz.nextIndex());
+  }
 }

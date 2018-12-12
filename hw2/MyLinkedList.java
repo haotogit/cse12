@@ -182,8 +182,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public int nextIndex()
         {
-            return this.currIndex + 1 >= MyLinkedList.this.size() ?
-                MyLinkedList.this.size() : this.currIndex + 1;
+            return this.currIndex >= MyLinkedList.this.size() ?
+                MyLinkedList.this.size() : this.currIndex;
         }
 
         @Override
@@ -207,7 +207,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public int previousIndex()
         {
-            return this.currIndex == 0 ? -1 : this.currIndex - 1; 
+            return this.currIndex - 1 == 0 ? -1 : this.currIndex - 2; 
         }
 
         @Override
