@@ -213,12 +213,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public void add(E e)
         {
-            // if going forward input element before the next element
-            //
-            // if going backwards input element after the previous
-
-            if (this.currDirection) MyLinkedList.this.add(this.currIndex-1, e);
-            else MyLinkedList.this.add(this.currIndex, e);
+            MyLinkedList.this.add(this.currIndex-1, e);
             this.stateChange = true;
         }
 

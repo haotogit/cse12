@@ -25,173 +25,221 @@ import java.util.ListIterator;
 
 public class LinkedListTester extends TestCase
 {
-	private MyLinkedList<Integer> empty ;
-	private MyLinkedList<Integer> one ;
-	private MyLinkedList<Integer> several ;
-	private MyLinkedList<Integer> anotherSeveral;
-	private MyLinkedList<String>  slist ;
-	static final int DIM = 5;
-	static final int FIBMAX = 30;
+    private MyLinkedList<Integer> empty ;
+    private MyLinkedList<Integer> one ;
+    private MyLinkedList<Integer> several ;
+    private MyLinkedList<Integer> anotherSeveral;
+    private MyLinkedList<String>  slist ;
+    static final int DIM = 5;
+    static final int FIBMAX = 30;
+    private MyLinkedList<Integer> nummers;
 
-	public LinkedListTester()
-	{
-		super() ;
-	}
-	/**
-	 * Standard Test Fixture. An empty list, a list with one entry (0) and 
-	 * a list with several entries (0,1,2)
-	 */ 
-	public void setUp()
-	{
-		empty = new MyLinkedList<Integer>();
-		one = new MyLinkedList<Integer>();
-		one.add(0,new Integer(0));
-		several = new MyLinkedList<Integer>();
-		anotherSeveral = new MyLinkedList<Integer>();
-		// List: 1,2,3,...,Dim
-		for (int i = DIM; i > 0; i--)
-			several.add(0,new Integer(i));
+    public LinkedListTester()
+    {
+        super() ;
+    }
+    /**
+     * Standard Test Fixture. An empty list, a list with one entry (0) and 
+     * a list with several entries (0,1,2)
+     */ 
+    public void setUp()
+    {
+        empty = new MyLinkedList<Integer>();
+        one = new MyLinkedList<Integer>();
+        one.add(0,new Integer(0));
+        several = new MyLinkedList<Integer>();
+        anotherSeveral = new MyLinkedList<Integer>();
+        // List: 1,2,3,...,Dim
+        for (int i = DIM; i > 0; i--)
+            several.add(0,new Integer(i));
 
-    for (int i = DIM; i > 0; i--)
-			anotherSeveral.add(0,new Integer(i));
+        for (int i = DIM; i > 0; i--)
+            anotherSeveral.add(0,new Integer(i));
 
-		// List: "First","Last"
-		slist = new MyLinkedList<String>();
-		slist.add(0,"First");
-		slist.add(1,"Last");
-	}
-	/** Test if heads of the lists are correct */
-	public void testGetHead()
-	{
-		assertEquals("Check 0",new Integer(0),one.get(0)) ;
-		assertEquals("Check 0",new Integer(1),several.get(0)) ;
-	}
+        // List: "First","Last"
+        slist = new MyLinkedList<String>();
+        slist.add(0,"First");
+        slist.add(1,"Last");
 
-	/** Test if size of lists are correct */
-	public void testListSize()
-	{
-		assertEquals("Check Empty Size",0,empty.size()) ;
-		assertEquals("Check One Size",1,one.size()) ;
-		assertEquals("Check Several Size",DIM,several.size()) ;
-	}
+        nummers = new MyLinkedList<Integer>();
+        int listSize = 20;
 
-	/** Test setting a specific entry */
-	public void testSet()
-	{
-		slist.set(1,"Final");
-		assertEquals("Setting specific value", "Final",slist.get(1));
-	}
+        for (int i = 0; i < listSize; i++)
+        {
+            nummers.add(i);
+        }
+    }
+    /** Test if heads of the lists are correct */
+    public void testGetHead()
+    {
+        assertEquals("Check 0",new Integer(0),one.get(0)) ;
+        assertEquals("Check 0",new Integer(1),several.get(0)) ;
+    }
 
-	/** Test isEmpty */
-	public void testEmpty()
-	{
-		assertTrue("empty is empty",empty.isEmpty()) ;
-		assertTrue("one is not empty",!one.isEmpty()) ;
-		assertTrue("several is not empty",!several.isEmpty()) ;
-	}
+    /** Test if size of lists are correct */
+    public void testListSize()
+    {
+        assertEquals("Check Empty Size",0,empty.size()) ;
+        assertEquals("Check One Size",1,one.size()) ;
+        assertEquals("Check Several Size",DIM,several.size()) ;
+    }
 
-	/** Test out of bounds exception on get */
-	public void testGetException()
-	{
-		try 
-		{
-			empty.get(0);
-			// This is how you can test when an exception is supposed 
-			// to be thrown
-			fail("Should have generated an exception");  
-		}
-		catch(IndexOutOfBoundsException e)
-		{
-			//  normal
-		}
-	}
+    /** Test setting a specific entry */
+    public void testSet()
+    {
+        slist.set(1,"Final");
+        assertEquals("Setting specific value", "Final",slist.get(1));
+    }
 
-  public void testRemove()
-  {
-      assertEquals("should be first item",new Integer(1),anotherSeveral.remove(0));
-      assertEquals("should be one less",DIM-1,anotherSeveral.size());
-  }
+    /** Test isEmpty */
+    public void testEmpty()
+    {
+        assertTrue("empty is empty",empty.isEmpty()) ;
+        assertTrue("one is not empty",!one.isEmpty()) ;
+        assertTrue("several is not empty",!several.isEmpty()) ;
+    }
 
-  public void testClear()
-  {
-      anotherSeveral.clear();
-      assertEquals("should be empty",0,anotherSeveral.size());
-  }
+    /** Test out of bounds exception on get */
+    public void testGetException()
+    {
+        try 
+        {
+            empty.get(0);
+            // This is how you can test when an exception is supposed 
+            // to be thrown
+            fail("Should have generated an exception");  
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            //  normal
+        }
+    }
 
-  public void testIsEmpty()
-  {
-      anotherSeveral.clear();
-      assertTrue("should be empty",anotherSeveral.isEmpty());
-  }
+    public void testRemove()
+    {
+        assertEquals("should be first item",new Integer(1),anotherSeveral.remove(0));
+        assertEquals("should be one less",DIM-1,anotherSeveral.size());
+    }
 
-	/** Test iterator on empty list and several list */
-	public void testIterator()
-	{
-		int counter = 0 ;
-		ListIterator<Integer> iter;
-		for (iter = empty.listIterator() ; iter.hasNext(); )
-		{
-			fail("Iterating empty list and found element") ;
-		}
-		counter = 0 ;
-		for (iter = several.listIterator() ; iter.hasNext(); iter.next())
-			counter++;
-		assertEquals("Iterator several count", counter, DIM);
-	}
+    public void testClear()
+    {
+        anotherSeveral.clear();
+        assertEquals("should be empty",0,anotherSeveral.size());
+    }
+
+    public void testIsEmpty()
+    {
+        anotherSeveral.clear();
+        assertTrue("should be empty",anotherSeveral.isEmpty());
+    }
+
+    /** Test iterator on empty list and several list */
+    public void testIterator()
+    {
+        int counter = 0 ;
+        ListIterator<Integer> iter;
+        for (iter = empty.listIterator() ; iter.hasNext(); )
+        {
+            fail("Iterating empty list and found element") ;
+        }
+        counter = 0 ;
+        for (iter = several.listIterator() ; iter.hasNext(); iter.next())
+            counter++;
+        assertEquals("Iterator several count", counter, DIM);
+    }
 
 
-	/** test Iterator Fibonacci.
-	 * This is a more holistic test for the iterator.  You should add
-	 * several unit tests that do more targeted testing of the individual
-	 * iterator methods.  */
-	public void testIteratorFibonacci()
-	{
+    /** test Iterator Fibonacci.
+     * This is a more holistic test for the iterator.  You should add
+     * several unit tests that do more targeted testing of the individual
+     * iterator methods.  */
+    public void testIteratorFibonacci()
+    {
 
-    //static final int DIM = 5;
-	// static final int FIBMAX = 30;
-		MyLinkedList<Integer> fib  = new MyLinkedList<Integer>();
-		ListIterator<Integer> iter;
-		// List: 0 1 1 2 3 5 8 13 ... 
-		// Build the list with integers 1 .. FIBMAX
-		int t, p = 0, q = 1;
-		fib.add(0,p);
-		fib.add(1,q);
-		for (int k = 2; k <= FIBMAX; k++)
-		{
-			t = p+q;
-			fib.add(k,t);
-			p = q;
-      q = t; 
-		}
-		// Now iterate through the list to near the middle, read the
-		// previous two entries and verify the sum.
-		iter = fib.listIterator();
-		int sum = 0;
-		for (int j = 1; j < FIBMAX/2; j++)
-			sum = iter.next();
-		assertEquals(iter.previous() + iter.previous(),sum);
-    iter.previous();
-		// Go forward with the list iterator
-		assertEquals(iter.next() + iter.next(),sum);
-	}
+        //static final int DIM = 5;
+        // static final int FIBMAX = 30;
+        MyLinkedList<Integer> fib  = new MyLinkedList<Integer>();
+        ListIterator<Integer> iter;
+        // List: 0 1 1 2 3 5 8 13 ... 
+        // Build the list with integers 1 .. FIBMAX
+        int t, p = 0, q = 1;
+        fib.add(0,p);
+        fib.add(1,q);
+        for (int k = 2; k <= FIBMAX; k++)
+        {
+            t = p+q;
+            fib.add(k,t);
+            p = q;
+            q = t; 
+        }
+        // Now iterate through the list to near the middle, read the
+        // previous two entries and verify the sum.
+        iter = fib.listIterator();
+        int sum = 0;
+        for (int j = 1; j < FIBMAX/2; j++)
+            sum = iter.next();
+        assertEquals(iter.previous() + iter.previous(),sum);
+        iter.previous();
+        // Go forward with the list iterator
+        assertEquals(iter.next() + iter.next(),sum);
+    }
 
-  public void testPrevNextIndexes()
-  {
-      int listSize = 100;
-      MyLinkedList<Integer> nummerz = new MyLinkedList<Integer>();
-      for (int i = 0; i < listSize; i++)
-      {
-          nummerz.add(i);
-      }
+    public void testPrevNextIndexes()
+    {
+        int listSize = 100;
+        MyLinkedList<Integer> nummerz = new MyLinkedList<Integer>();
+        for (int i = 0; i < listSize; i++)
+        {
+            nummerz.add(i);
+        }
 
-      ListIterator<Integer> nummzz = nummerz.listIterator();
+        ListIterator<Integer> nummzz = nummerz.listIterator();
 
-      for (int j = 0; j < listSize/2; j++)
-      {
-        nummzz.next();
-      }
+        for (int j = 0; j < listSize/2; j++)
+        {
+            nummzz.next();
+        }
 
-      assertEquals(listSize/2 - 2, nummzz.previousIndex());
-      assertEquals(listSize/2, nummzz.nextIndex());
-  }
+        assertEquals(listSize/2 - 2, nummzz.previousIndex());
+        assertEquals(listSize/2, nummzz.nextIndex());
+    }
+
+    public void testAdding()
+    {
+        ListIterator<Integer> nummzz1 = nummers.listIterator();
+
+        int newN = 9999;
+        nummzz1.next();
+        nummzz1.add(newN);
+        assertEquals((int)newN, (int)nummzz1.previous());
+    }
+
+    public void testRemoval()
+    {
+        ListIterator<Integer> nummzz2 = nummers.listIterator();
+        int oldSize = nummers.size();
+
+        nummzz2.next();
+        nummzz2.remove();
+        assertEquals(oldSize - 1, nummers.size());
+    }
+
+    public void testBadRemove()
+    {
+        ListIterator<Integer> nummzz3 = nummers.listIterator();
+        nummzz3.next();
+        nummzz3.remove();
+
+        try
+        {
+            nummzz3.remove();
+            fail("Should not allow removal immediately removed");
+        }
+        catch(IllegalStateException e)
+        {
+        
+        }
+    }
+    //public void testSet
+    //public void testBadSet
 }

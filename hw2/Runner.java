@@ -54,6 +54,14 @@ public class Runner {
         // previous two entries and verify the sum.
         iter = fib.listIterator();
         int sum = 0;
+        System.out.println("NEXT:"+iter.next());
+        System.out.println("prv:"+iter.previous());
+        //iter.previous();
+        //System.out.println("sii"+iter.previous());
+        //System.out.println("siinext"+iter.next());
+        //iter.remove();
+        //System.out.println("whaa"+iter.next());
+        //System.out.println("whaasii"+iter.previous());
         //for (int j = 1; j < FIBMAX/2; j++) {
         //    sum = iter.next();
         //}
@@ -62,8 +70,6 @@ public class Runner {
         //System.out.println("previousPrevious:"+iter.previous());
         //System.out.println("next:"+iter.next());
         //System.out.println("nextnext:"+iter.next());
-        System.out.println("nextIndex:"+iter.nextIndex());
-        System.out.println("previousIndex?"+iter.previousIndex());
         //while (iter.hasNext()) {
         //    System.out.println("next::"+iter.next());
         //}
