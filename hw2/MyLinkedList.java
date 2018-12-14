@@ -224,7 +224,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             if (this.currNode == null || this.stateChange) throw new IllegalStateException();
             int removalIndex = this.currDirection ? this.currIndex - 1 : this.currIndex;
             MyLinkedList.this.remove(removalIndex);
-            this.cursor = MyLinkedList.this.getNth(removalIndex);
             this.stateChange = true;
         }
 
