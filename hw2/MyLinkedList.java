@@ -113,7 +113,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     public E remove(int index)
     {
         if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
-        Node temp = getNth(index); 
+        Node temp = getNth(index);
         E tempVal = temp.data;
         Node prev = temp.prev;
         Node next = temp.next;
@@ -176,8 +176,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public boolean hasNext()
         {
             setDirection(true);
-            // this might not be right
-            // need to fix cursor position
             return this.cursor.next != null && this.currIndex < MyLinkedList.this.size();
         }
 
@@ -223,8 +221,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public void remove()
         {
             if (this.currNode == null || this.stateChange) throw new IllegalStateException();
-            int removalIndex = this.currIndex == 0 ? 0 : this.currIndex - 1;
+            int removalIndex = this.currDirection ? this.currIndex - 1 : this.currIndex;
             MyLinkedList.this.remove(removalIndex);
+            this.cursor = MyLinkedList.this.getNth(removalIndex);
             this.stateChange = true;
         }
 

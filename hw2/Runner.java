@@ -23,9 +23,12 @@ public class Runner {
         // previous two entries and verify the sum.
         iter = fib.listIterator();
         int sum = 0;
+        iter.next();
+        iter.add(99999);
+        System.out.println("sii"+iter.previous());
+        iter.remove();
         //iter.previous();
-        //System.out.println("sii"+iter.previous());
-        //System.out.println("siinext"+iter.next());
+        System.out.println("siinext"+iter.next());
         //iter.remove();
         //System.out.println("whaa"+iter.next());
         //System.out.println("whaasii"+iter.previous());
