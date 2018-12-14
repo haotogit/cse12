@@ -159,6 +159,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             // if this.currDirection then going forwards
             // else going backwards
             this.currDirection = fwd;
+            if (!this.currDirection && this.cursor.next != null) this.cursor = this.cursor.next;
         }
 
         @Override

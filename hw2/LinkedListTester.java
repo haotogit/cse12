@@ -178,8 +178,8 @@ public class LinkedListTester extends TestCase
         int sum = 0;
         for (int j = 1; j < FIBMAX/2; j++)
             sum = iter.next();
-        assertEquals(iter.previous() + iter.previous(),sum);
         iter.previous();
+        assertEquals(iter.previous() + iter.previous(),sum);
         // Go forward with the list iterator
         assertEquals(iter.next() + iter.next(),sum);
     }
@@ -247,7 +247,6 @@ public class LinkedListTester extends TestCase
         int newVal = 10000;
         nummzz4.next();
         nummzz4.set(newVal);
-        nummzz4.next();
         assertEquals(newVal, (int)nummzz4.previous());
     }
 
