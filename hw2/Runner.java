@@ -5,37 +5,6 @@ public class Runner {
     static final int FIBMAX = 30;
 
     public static void main(String[] args) {
-        //MyLinkedList<Integer> list = new MyLinkedList<Integer>();
-        //for (int i = 0; i < 5; i++) {
-        //    list.add(i);
-        //}
-        
-        //list.set(0, "newZero");
-        //list.set(2, "newTOOO");
-        //list.remove(2);
-        //System.out.println(list.get(0));
-        //System.out.println(list.get(1));
-        //System.out.println(list.get(2));
-        
-        //ListIterator<Integer> iter = list.QQQlistIterator();
-        //iter.previous();
-        //System.out.println("starting nextIndex:"+iter.nextIndex());
-
-        //System.out.println('\n');
-        //while (iter.hasNext()) {
-        //    System.out.println("next:"+iter.next());
-        //}
-        //iter.next();
-        //System.out.println("prevIndex"+iter.previousIndex());
-        //System.out.println("nextIndex"+iter.nextIndex());
-        //iter.next();
-        //iter.previous();
-        //iter.remove();
-        //System.out.println('\n');
-        //ListIterator<Integer> anotherIter = list.QQQlistIterator();
-        //while (anotherIter.hasNext()) {
-        //    System.out.println("iterrr:"+anotherIter.next());
-        //}
         MyLinkedList<Integer> fib  = new MyLinkedList<Integer>();
         ListIterator<Integer> iter;
         // List: 0 1 1 2 3 5 8 13 ... 
@@ -54,10 +23,6 @@ public class Runner {
         // previous two entries and verify the sum.
         iter = fib.listIterator();
         int sum = 0;
-        System.out.println("NEXT:"+iter.next());
-        System.out.println("NEXT:"+iter.next());
-        System.out.println("prv:"+iter.previous());
-        System.out.println("prv:"+iter.previous());
         //iter.previous();
         //System.out.println("sii"+iter.previous());
         //System.out.println("siinext"+iter.next());
@@ -66,14 +31,6 @@ public class Runner {
         //System.out.println("whaasii"+iter.previous());
         //for (int j = 1; j < FIBMAX/2; j++) {
         //    sum = iter.next();
-        //}
-        //System.out.println("SUM:"+sum);
-        //System.out.println("previous:"+iter.previous());
-        //System.out.println("previousPrevious:"+iter.previous());
-        //System.out.println("next:"+iter.next());
-        //System.out.println("nextnext:"+iter.next());
-        //while (iter.hasNext()) {
-        //    System.out.println("next::"+iter.next());
         //}
     }
 }

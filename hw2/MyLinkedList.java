@@ -165,9 +165,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public E next()
         {
             if (!hasNext()) throw new NoSuchElementException();
-            this.cursor = this.cursor.next;
-            this.currNode = this.cursor;
+            this.cursor = MyLinkedList.this.getNth(this.currIndex);
             this.currIndex++;
+            this.currNode = this.cursor;
             this.stateChange = false;
             return this.cursor.data;
         }
@@ -176,7 +176,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public boolean hasNext()
         {
             setDirection(true);
-            return this.cursor.next != null && this.cursor.next != MyLinkedList.this.tail;
+            // this might not be right
+            // need to fix cursor position
+            return this.cursor.next != null && this.currIndex < MyLinkedList.this.size();
         }
 
         @Override
@@ -190,9 +192,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public E previous()
         {
             if (!hasPrevious()) throw new NoSuchElementException();
-            this.cursor = this.cursor.prev;
-            this.currNode = this.cursor;
             this.currIndex--;
+            this.cursor = MyLinkedList.this.getNth(this.currIndex);
+            this.currNode = this.cursor;
             this.stateChange = false;
             return this.cursor.data;
         }
@@ -201,7 +203,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public boolean hasPrevious()
         {
             setDirection(false);
-            return this.cursor.prev != null && this.cursor.prev != MyLinkedList.this.head;
+            return this.cursor.prev != null && this.currIndex > 0;
         }
 
         @Override
