@@ -246,14 +246,14 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     }
 
     //UNCOMMENT the following when you believe your MyListIterator class is
-        public Iterator<E> iterator()
-        {
+    public Iterator<E> iterator()
+    {
         return new MyListIterator();
-        }
-        public ListIterator<E> listIterator()
-        {
+    }
+    public ListIterator<E> listIterator()
+    {
         return new MyListIterator();
-        }
+    }
 }
 // VIM: set the tabstop and shiftwidth to 4 
 // vim:tw=78:ts=4:et:sw=4
