@@ -55,6 +55,8 @@ public class Runner {
         iter = fib.listIterator();
         int sum = 0;
         System.out.println("NEXT:"+iter.next());
+        System.out.println("NEXT:"+iter.next());
+        System.out.println("prv:"+iter.previous());
         System.out.println("prv:"+iter.previous());
         //iter.previous();
         //System.out.println("sii"+iter.previous());

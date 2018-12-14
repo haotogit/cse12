@@ -240,6 +240,30 @@ public class LinkedListTester extends TestCase
         
         }
     }
-    //public void testSet
-    //public void testBadSet
+
+    public void testIteratorSet()
+    {
+        ListIterator<Integer> nummzz4 = nummers.listIterator();
+        int newVal = 10000;
+        nummzz4.next();
+        nummzz4.set(newVal);
+        nummzz4.next();
+        assertEquals(newVal, (int)nummzz4.previous());
+    }
+
+    public void testBadSet()
+    {
+        ListIterator<Integer> nummzz5 = nummers.listIterator();
+        nummzz5.next();
+        nummzz5.add(555);
+        try
+        {
+            nummzz5.set(999999);
+            fail("Should not allow set immediately after state change");
+        }
+        catch (IllegalStateException e) 
+        {
+
+        }
+    }
 }
