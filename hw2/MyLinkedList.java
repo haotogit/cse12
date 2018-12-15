@@ -159,14 +159,17 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             // if this.currDirection then going forwards
             // else going backwards
             this.currDirection = fwd;
-            if (!this.currDirection && this.cursor.next != null) this.cursor = this.cursor.next;
         }
 
         @Override
         public E next()
         {
             if (!hasNext()) throw new NoSuchElementException();
-            this.cursor = MyLinkedList.this.getNth(this.currIndex);
+            // this is to reposition cursor if it was going backwards put
+            // cursor back to forward position
+            if (!this.currDirection) this.cursor = this.cursor.prev;
+            this.setDirection(true);
+            this.cursor = this.cursor.next;
             this.currIndex++;
             this.currNode = this.cursor;
             this.stateChange = false;
@@ -176,7 +179,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public boolean hasNext()
         {
-            setDirection(true);
             return this.cursor.next != null && this.currIndex < MyLinkedList.this.size();
         }
 
@@ -191,8 +193,11 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public E previous()
         {
             if (!hasPrevious()) throw new NoSuchElementException();
+            // this is to reposition cursor if it was going backwards put
+            // cursor back to forward position
+            if (!this.currDirection) this.cursor = this.cursor.prev;
+            this.setDirection(false);
             this.currIndex--;
-            this.cursor = MyLinkedList.this.getNth(this.currIndex);
             this.currNode = this.cursor;
             this.stateChange = false;
             return this.cursor.data;
@@ -201,7 +206,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public boolean hasPrevious()
         {
-            setDirection(false);
             return this.cursor.prev != null && this.currIndex > 0;
         }
 
@@ -214,7 +218,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public void add(E e)
         {
-            MyLinkedList.this.add(this.currIndex-1, e);
+            int addIndex = this.currIndex - 1;
+            MyLinkedList.this.add(addIndex, e);
+            this.cursor = MyLinkedList.this.getNth(addIndex);
             this.stateChange = true;
         }
 
@@ -224,6 +230,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
             if (this.currNode == null || this.stateChange) throw new IllegalStateException();
             int removalIndex = this.currDirection ? this.currIndex - 1 : this.currIndex;
             MyLinkedList.this.remove(removalIndex);
+            this.cursor = MyLinkedList.this.getNth(removalIndex);
             this.stateChange = true;
         }
 

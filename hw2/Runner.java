@@ -26,8 +26,22 @@ public class Runner {
         
         //iter.previous();
         //iter.remove();
-        //System.out.println("whaa"+iter.next());
-        //System.out.println("whaasii"+iter.previous());
+        System.out.println("whaa"+iter.next());
+        System.out.println("whaasii"+iter.previous());
+        iter.remove();
+        System.out.println("whaasiinext"+iter.next());
+        System.out.println("whaasiinext"+iter.previous());
+        System.out.println("whaasiinext"+fib.size());
+        //while (iter.hasNext())
+        //{
+        //    System.out.println("whaa"+iter.next());
+        //}
+
+        //while (iter.hasPrevious())
+        //{
+        //    System.out.println("whaasii"+iter.previous());
+        //}
+
         //for (int j = 1; j < FIBMAX/2; j++) {
         //    sum = iter.next();
         //}
