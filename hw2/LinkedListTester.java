@@ -221,7 +221,8 @@ public class LinkedListTester extends TestCase
 
         nummzz2.next();
         nummzz2.remove();
-        assertEquals(oldSize - 1, nummers.size());
+        assertEquals("should be one less", oldSize - 1, nummers.size());
+        assertEquals("new 0 == 1 because 0 got removed", new Integer(1), nummzz2.previous());
     }
 
     public void testBadRemove()

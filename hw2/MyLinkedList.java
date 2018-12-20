@@ -10,7 +10,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     private Node head;
     private Node tail;
 
-    protected class Node {
+    protected class Node
+    {
         E data;
         Node next;
         Node prev;
@@ -20,7 +21,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         }
     }
 
-    public MyLinkedList() 
+    public MyLinkedList()
     {
         this.head = new Node(null);
         this.tail = new Node(null);
@@ -56,7 +57,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     }
 
     @Override
-    public boolean add(E el) 
+    public boolean add(E el)
     {
         if (el == null) throw new NullPointerException("Can't add null element");
         Node newNode = new Node(el);
@@ -71,7 +72,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     }
 
     @Override
-    public void add(int index, E el) 
+    public void add(int index, E el)
     {
         if (el == null) throw new NullPointerException("Can't add null element");
         else if (index < 0 || index > size()) throw new IndexOutOfBoundsException();
@@ -156,6 +157,9 @@ public class MyLinkedList<E> extends AbstractList<E>  {
 
         private void setDirection(boolean fwd)
         {
+            // this is to reposition cursor if it was going backwards put
+            // cursor back to forward position
+            if (!this.currDirection) this.cursor = this.cursor.prev;
             // if this.currDirection then going forwards
             // else going backwards
             this.currDirection = fwd;
@@ -165,9 +169,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public E next()
         {
             if (!hasNext()) throw new NoSuchElementException();
-            // this is to reposition cursor if it was going backwards put
-            // cursor back to forward position
-            if (!this.currDirection) this.cursor = this.cursor.prev;
             this.setDirection(true);
             this.cursor = this.cursor.next;
             this.currIndex++;
@@ -193,9 +194,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         public E previous()
         {
             if (!hasPrevious()) throw new NoSuchElementException();
-            // this is to reposition cursor if it was going backwards put
-            // cursor back to forward position
-            if (!this.currDirection) this.cursor = this.cursor.prev;
             this.setDirection(false);
             this.currIndex--;
             this.currNode = this.cursor;

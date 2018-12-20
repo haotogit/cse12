@@ -1,0 +1,76 @@
+1. n^2 +100=O(n^4) F n^4
+2. n^2 +100=O(n^2) T
+3. n^2 +100=O(n) F n^2
+4. n^2 − 1,000,000,000 = O(n) F n^2
+5. n^2 +n =O(n) F n^2
+6. n^2 +n =O(n^2) T
+7. n^2 *n=O(n^2) F n^3
+8. n^2 *n=O(n^3) T
+9. n^2 +log(n)*n^2=O(n^2) F, n^4 ?
+10. n^2 + log(n) * n^2 = O(n^2) F, n^4 ?
+11. n2 +100 = Ω(n 4) F, n^2 ?
+12. n2 +100 = Ω(n 2) T
+13. n2 +100 = Ω(n) F, n^2 
+14. n2 + n = Ω(n) F, n^2
+15. n + 100,000 = Ω(n) T
+16. n^2 + n + 100 = θ(n) F, n^2
+17. n^2 + n + 100 = θ(n^2) T
+18. n^2 + n + 100 = θ(n^3) F, n^2
+19. n^2 * n + 100 = θ(n^3) F, n^2
+20. 100*nlog(n)=θ(nlogn) T
+
+RUNTIME
+1. for (int i = 0; i < n; i+=2)
+     sum++;
+Running time: O(n/2)
+Explanation: Single loop that'll run 0-n/2 times. For each iteration,
+it'll execute: evaluate i < n; sum++; i+=2; therefore 1 loop * (n/2) =
+O(n/2)
+
+2. for (int i = 1; i < n; i*=2)
+     sum++;
+Running time: O(n/2)
+Explanation: Single loop that'll run 1-n/2 times. For each iteration,
+it'll execute: evaluate i < n; sum++; i*=2; therefore 1 loop * (n/2) =
+O(n/2)
+
+3. for (int i = 0; i < n; i++)
+     for (int j = 0; j < n; j++)
+       sum++;
+Running time: O(n^2)
+Explanation: Two loops, each 0-n times, For each iteration of outer loop,
+it'll execute 0-n times inner loop iterations; therefore O(n^2)
+
+4. for (int i = 0; i < n; i++)
+     sum++;
+
+   for (int j = 0; j < n; j++)
+     sum++
+Running time: O(i+j)
+Explanation: Two loops, each 0-n times. Each O(n), so O(i) and then after O(j), so i+j
+and therefore O(i+j)
+
+5. for (int i = 0; i < 2n; i++)
+     sum++;
+Running time: O(n)
+Explanation: One loop, that'll run 0-2n. 1 execution for header; 1 for body
+sum++; O(2n) = O(n) drop constant
+
+6. for (int i = 0; i < n^2; i++)
+     sum++;
+Running time: O(n^2)
+Explanation: One loop, that'll run 0-n^2 times.
+
+7. for (int i = 0; i < n; i++)
+     for (int j = 0; j < n^2; j++)
+       sum++;
+Running time: O(n^3)
+Explanation: Two loops, one 0-n times, and for each of those 0-n^2 times. 
+O(n)*O(n^2) = O(n^3) 
+
+8. for (int i = 0; i < n; i++)
+     for (int j = 0; j < 10000; j++)
+       sum++;
+Running time: O(n)
+Explanation: Two loops, one 0-n times, and for each of those 0-10000 times.
+O(n)*O(10000) = O(n)
