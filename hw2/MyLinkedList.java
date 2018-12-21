@@ -25,16 +25,16 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     {
         this.head = new Node(null);
         this.tail = new Node(null);
-        this.head.next = tail;
+        this.head.next = this.tail;
         this.head.prev = null;
-        this.tail.prev = head;
+        this.tail.prev = this.head;
         this.tail.next = null;
     }
 
     @Override
     public int size()
     {
-        return size;
+        return this.size;
     }
 
     private Node getNth(int index)
@@ -52,8 +52,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     @Override
     public E get(int index)
     {
-        if (size() == 0 && this.head.next == this.tail) throw new IndexOutOfBoundsException();
-        return getNth(index).data;
+        if (this.size() == 0 && this.head.next == this.tail) throw new IndexOutOfBoundsException();
+        return this.getNth(index).data;
     }
 
     @Override
@@ -61,28 +61,22 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     {
         if (el == null) throw new NullPointerException("Can't add null element");
         Node newNode = new Node(el);
-        Node last = tail.prev;
+        Node last = this.tail.prev;
         newNode.prev = last;
-        newNode.next = tail;
+        newNode.next = this.tail;
         last.next = newNode;
-        tail.prev = newNode;
-        int prevSize = size();
-        size++;
-        return prevSize != size;
+        this.tail.prev = newNode;
+        int prevSize = this.size();
+        this.size++;
+        return prevSize != this.size;
     }
 
     @Override
     public void add(int index, E el)
     {
         if (el == null) throw new NullPointerException("Can't add null element");
-        else if (index < 0 || index > size()) throw new IndexOutOfBoundsException();
-        int i = 0;
-        Node temp = this.head;
-        while(temp.next != null && i <= index) {
-            temp = temp.next;
-            i++;
-        }
-
+        else if (index < 0 || index > this.size()) throw new IndexOutOfBoundsException();
+        Node temp = this.getNth(index);
         Node prev = temp.prev;
         Node next = temp;
         Node newNode = new Node(el);
@@ -90,21 +84,15 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         newNode.next = next;
         next.prev = newNode;
         prev.next = newNode;
-        size++;
+        this.size++;
     }
 
     @Override
     public E set(int index, E el)
     {
         if (el == null) throw new NullPointerException("Null value not allowed");
-        else if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
-        int i = 0;
-        Node temp = this.head;
-        while(temp != null && i <= index) {
-            temp = temp.next;
-            i++;
-        }
-
+        else if (index < 0 || index >= this.size()) throw new IndexOutOfBoundsException();
+        Node temp = this.getNth(index);
         E oldData = temp.data;
         temp.data = el;
         return oldData;
@@ -113,8 +101,8 @@ public class MyLinkedList<E> extends AbstractList<E>  {
     @Override
     public E remove(int index)
     {
-        if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
-        Node temp = getNth(index);
+        if (index < 0 || index >= this.size()) throw new IndexOutOfBoundsException();
+        Node temp = this.getNth(index);
         E tempVal = temp.data;
         Node prev = temp.prev;
         Node next = temp.next;
@@ -122,22 +110,22 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         next.prev = prev;
         temp.prev = null;
         temp.next = null;
-        size--;
+        this.size--;
         return tempVal;
     }
 
     @Override
     public void clear()
     {
-        while (size() != 0) {
-            remove(0);
+        while (this.size() != 0) {
+            this.remove(0);
         }
     }
 
     @Override
     public boolean isEmpty()
     {
-        return size() == 0 && this.head.next == this.tail;
+        return this.size() == 0 && this.head.next == this.tail;
     }
 
     // The following MyListIterator class is called an Inner Class
@@ -168,7 +156,7 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         @Override
         public E next()
         {
-            if (!hasNext()) throw new NoSuchElementException();
+            if (!this.hasNext()) throw new NoSuchElementException();
             this.setDirection(true);
             this.cursor = this.cursor.next;
             this.currIndex++;
@@ -250,7 +238,6 @@ public class MyLinkedList<E> extends AbstractList<E>  {
         return new MyListIterator();
     }
 
-    //UNCOMMENT the following when you believe your MyListIterator class is
     public Iterator<E> iterator()
     {
         return new MyListIterator();
