@@ -12,5 +12,6 @@ public class Runner {
         elDeque12 = new Deque12<Integer>(10);
         elDeque12.addFront(0);
         elDeque12.addFront(1);
+        System.out.println("hola"+elDeque12.peekFront());
     }
 }

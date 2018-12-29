@@ -17,10 +17,14 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public Deque12(int initialCapacity)
     {
-        list = new ArrayList<E>(initialCapacity);
+        // +2 because of sentinel front and rear
+        list = new ArrayList<E>(initialCapacity+2);
         capacity = initialCapacity;
         front = 0;
         rear = 1;
+        for (int i = 0; i < initialCapacity; i++) {
+            list.add(null);
+        }
     }
 
     public int capacity()
@@ -30,18 +34,19 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public int size()
     {
-        return list.size();
+        return size;
     }
 
     public boolean addFront(E el)
     {
         if (el == null && size < capacity)
             throw new NullPointerException();
-        else if (list.size() == capacity) 
+        else if (size == capacity) 
             return false;
 
-        list.add(front, el);
+        list.set(front, el);
         frontRearHandler(true);
+        size++;
         return true;
     }
 
@@ -57,6 +62,7 @@ public class Deque12<E> implements BoundedDeque<E> {
         } else {
             rear = (rear + 1) % capacity;
         }
+        System.out.format("Front now @ %d", front);
     }
 
     public E removeFront()
@@ -71,7 +77,7 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public E peekFront()
     {
-        return null;
+        return list.get(front == capacity - 1 ? 0 : front + 1);
     }
 
     public E peekBack()
