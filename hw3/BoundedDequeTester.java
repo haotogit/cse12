@@ -1,11 +1,13 @@
 import junit.framework.TestCase;
+import java.io.*;
 
 public class BoundedDequeTester extends TestCase {
     private Deque12<Integer> intDeque120;
+    private int intDeque120Capacity = 30;
 
     public void setUp()
     {
-        intDeque120 = new Deque12<Integer>(30);
+        intDeque120 = new Deque12<Integer>(intDeque120Capacity);
     }
 
     /** 
@@ -14,7 +16,7 @@ public class BoundedDequeTester extends TestCase {
      */
     public void testCapacity()
     {
-    
+        assertEquals(intDeque120Capacity, intDeque120.capacity());
     }
 
     /** 
@@ -22,7 +24,10 @@ public class BoundedDequeTester extends TestCase {
      * and it should remain unchanged 
      */
     public void testSize()
-    {}
+    {
+        intDeque120.addFront(0);
+        assertEquals(1, intDeque120.size());
+    }
 
     /**
      * Adds element to the front of BoundedDeque if size 
@@ -31,16 +36,41 @@ public class BoundedDequeTester extends TestCase {
      * new element is new front element of list
      */
     public void testAddFront()
-    {}
+    {
+        int newEl = 99;
+        assertTrue(intDeque120.addFront(newEl));
+        assertEquals(newEl, (int)intDeque120.peekFront());
+    }
 
     /**
-     * If element null, and size is less than capacity throw
+     * If element null and size is less than capacity throw
      * NullPointerException
+     */
+    public void testBadNullAddFront()
+    {
+        try
+        {
+            intDeque120.addFront(null);
+            fail("Can't add null element");
+        } catch(NullPointerException e)
+        {
+            assertTrue(intDeque120.size() < intDeque120Capacity);
+        }
+    }
+
+    /**
      * shouldn't be able to add if size greater or = to capacity
      * returns false since it failed
      */
-    public void testBadAddFront()
-    {}
+    public void testFullListAddFront()
+    {
+        while(intDeque120.addFront(0))
+        {
+
+        }
+        assertFalse(intDeque120.addFront(9999));
+        assertTrue(intDeque120.size() == intDeque120Capacity);
+    }
 
     /**
      * Adds element to back of BoundedDeque if size is less than

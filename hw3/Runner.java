@@ -10,8 +10,9 @@ public class Runner {
     public void runn()
     {
         elDeque12 = new Deque12<Integer>(10);
-        elDeque12.addFront(0);
-        elDeque12.addFront(1);
-        System.out.println("hola"+elDeque12.peekFront());
+        for (int i = 0; i <= 10; i++) {
+            elDeque12.addFront(i);
+        }
+        //System.out.println("holaa"+elDeque12.peekFront());
     }
 }

@@ -9,20 +9,23 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Deque12<E> implements BoundedDeque<E> {
-    private int size = 0; 
+    private int size = 0;
     private int capacity;
     private ArrayList<E> list;
     private int front;
     private int rear;
+    private int capacityPlusSentinel;
 
     public Deque12(int initialCapacity)
     {
         // +2 because of sentinel front and rear
-        list = new ArrayList<E>(initialCapacity+2);
+        capacityPlusSentinel = initialCapacity + 2;
+        list = new ArrayList<E>(capacityPlusSentinel);
         capacity = initialCapacity;
         front = 0;
         rear = 1;
-        for (int i = 0; i < initialCapacity; i++) {
+        for (int i = 0; i < capacityPlusSentinel; i++) 
+        {
             list.add(null);
         }
     }
@@ -58,11 +61,10 @@ public class Deque12<E> implements BoundedDeque<E> {
     private void frontRearHandler(boolean fw)
     {
         if (fw) {
-            front = (front + capacity - 1) % capacity;
+            front = (front + capacityPlusSentinel - 1) % capacityPlusSentinel;
         } else {
-            rear = (rear + 1) % capacity;
+            rear = (rear + 1) % capacityPlusSentinel;
         }
-        System.out.format("Front now @ %d", front);
     }
 
     public E removeFront()
@@ -77,7 +79,7 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public E peekFront()
     {
-        return list.get(front == capacity - 1 ? 0 : front + 1);
+        return list.get(front == capacityPlusSentinel - 1 ? 0 : front + 1);
     }
 
     public E peekBack()
