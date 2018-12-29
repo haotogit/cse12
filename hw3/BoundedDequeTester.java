@@ -4,10 +4,13 @@ import java.io.*;
 public class BoundedDequeTester extends TestCase {
     private Deque12<Integer> intDeque120;
     private int intDeque120Capacity = 30;
+    private Deque12<Integer> intDeque121;
+    private int intDeque121Capacity = 30;
 
     public void setUp()
     {
         intDeque120 = new Deque12<Integer>(intDeque120Capacity);
+        intDeque121 = new Deque12<Integer>(intDeque121Capacity);
     }
 
     /** 
@@ -48,16 +51,14 @@ public class BoundedDequeTester extends TestCase {
      * If element null and size is less than capacity throw
      * NullPointerException
      */
-    public void testBadNullAddFront()
+    public void testNullAddFront()
     {
+        assertTrue(intDeque120.size() < intDeque120Capacity);
         try
         {
             intDeque120.addFront(null);
-            fail("Can't add null element");
-        } catch(NullPointerException e)
-        {
-            assertTrue(intDeque120.size() < intDeque120Capacity);
-        }
+            fail("Cannot add null element");
+        } catch(NullPointerException e) {}
     }
 
     /**
@@ -78,16 +79,36 @@ public class BoundedDequeTester extends TestCase {
      */
     public void testAddBack()
     {
+        int oldSize = intDeque121.size();
+        int newEl = 99;
+        assertTrue(oldSize < intDeque121Capacity);
+        assertTrue(intDeque121.addBack(newEl));
+        assertTrue(oldSize + 1 == intDeque121.size());
     }
 
     /**
-     * If element null or size is greater or equal than capacity throw
+     * If element null or size is less than capacity throw
      * NullPointerException
+     */
+    public void testNullAddBack()
+    {
+       assertTrue(intDeque121.size() < intDeque121Capacity); 
+       try
+       {
+           intDeque121.addBack(null);
+           fail("Cannot add null element");
+       } catch (NullPointerException e) {}
+    }
+
+    /**
      * Cannot add if size greater or = to capacity and return
      * false.
      */
-    public void testBadAddBack()
-    {}
+    public void testFullListAddBack()
+    {
+        while(intDeque121.addBack(0)) {}
+        assertFalse(intDeque121.addBack(0));
+    }
 
     /**
      * Remove front element from BoundedDeque return it or return null

@@ -55,6 +55,14 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public boolean addBack(E el)
     {
+        if (el == null && size < capacity)
+            throw new NullPointerException();
+        else if (size == capacity)
+            return false;
+
+        list.set(rear, el);
+        frontRearHandler(false);
+        size++;
         return true;
     }
 
@@ -84,6 +92,6 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public E peekBack()
     {
-        return null;
+        return list.get(rear == 0 ? capacityPlusSentinel - 1 : rear - 1);
     }
 }
