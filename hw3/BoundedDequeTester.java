@@ -38,7 +38,9 @@ public class BoundedDequeTester extends TestCase {
     public void testAddFront()
     {
         int newEl = 99;
+        int oldSize = intDeque120.size();
         assertTrue(intDeque120.addFront(newEl));
+        assertEquals(oldSize + 1, intDeque120.size());
         assertEquals(newEl, (int)intDeque120.peekFront());
     }
 
@@ -64,10 +66,7 @@ public class BoundedDequeTester extends TestCase {
      */
     public void testFullListAddFront()
     {
-        while(intDeque120.addFront(0))
-        {
-
-        }
+        while(intDeque120.addFront(0)) {}
         assertFalse(intDeque120.addFront(9999));
         assertTrue(intDeque120.size() == intDeque120Capacity);
     }
@@ -78,7 +77,8 @@ public class BoundedDequeTester extends TestCase {
      * new element is the new rear element of list
      */
     public void testAddBack()
-    {}
+    {
+    }
 
     /**
      * If element null or size is greater or equal than capacity throw
