@@ -48,7 +48,7 @@ public class Deque12<E> implements BoundedDeque<E> {
             return false;
 
         list.set(front, el);
-        frontRearHandler(true);
+        frontRearHandler(true, true);
         size++;
         return true;
     }
@@ -61,28 +61,46 @@ public class Deque12<E> implements BoundedDeque<E> {
             return false;
 
         list.set(rear, el);
-        frontRearHandler(false);
+        frontRearHandler(false, true);
+        System.out.format("rearIndex @ %d\n", rear);
+        if (rear == 11) System.out.format("0 item is %d\n", list.get(1));
         size++;
         return true;
     }
 
-    private void frontRearHandler(boolean fw)
+    private void frontRearHandler(boolean fw, boolean inc)
     {
         if (fw) {
-            front = (front + capacityPlusSentinel - 1) % capacityPlusSentinel;
+            if (inc)
+                front = (front + capacityPlusSentinel - 1) % capacityPlusSentinel;
+            else
+                front = (front + 1) % capacityPlusSentinel;
         } else {
-            rear = (rear + 1) % capacityPlusSentinel;
+            if (inc)
+                rear = (rear + 1) % capacityPlusSentinel;
+            else
+                rear = (rear + capacityPlusSentinel - 1) % capacityPlusSentinel;
         }
     }
 
     public E removeFront()
     {
-        return null;
+        if (size == 0) return null;
+        E oldEl = peekFront();
+        list.set(front == capacityPlusSentinel - 1 ? 0 : front + 1, null);
+        frontRearHandler(true, false);
+        size--;
+        return oldEl;
     }
 
     public E removeBack()
     {
-        return null;
+        if (size == 0) return null;
+        E oldEl = peekBack();
+        list.set(rear == 0 ? capacityPlusSentinel - 1 : rear - 1, null);
+        frontRearHandler(false, false);
+        size--;
+        return oldEl;
     }
 
     public E peekFront()

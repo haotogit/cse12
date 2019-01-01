@@ -68,8 +68,8 @@ public class BoundedDequeTester extends TestCase {
     public void testFullListAddFront()
     {
         while(intDeque120.addFront(0)) {}
-        assertFalse(intDeque120.addFront(9999));
         assertTrue(intDeque120.size() == intDeque120Capacity);
+        assertFalse(intDeque120.addFront(9999));
     }
 
     /**
