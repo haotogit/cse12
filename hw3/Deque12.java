@@ -18,6 +18,8 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public Deque12(int initialCapacity)
     {
+        // TODO: Need to throw IllegalArgumentException if
+        // initialCapacity < 0
         // +2 because of sentinel front and rear
         capacityPlusSentinel = initialCapacity + 2;
         list = new ArrayList<E>(capacityPlusSentinel);
@@ -62,8 +64,6 @@ public class Deque12<E> implements BoundedDeque<E> {
 
         list.set(rear, el);
         frontRearHandler(false, true);
-        System.out.format("rearIndex @ %d\n", rear);
-        if (rear == 11) System.out.format("0 item is %d\n", list.get(1));
         size++;
         return true;
     }
@@ -85,9 +85,9 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public E removeFront()
     {
-        if (size == 0) return null;
         E oldEl = peekFront();
-        list.set(front == capacityPlusSentinel - 1 ? 0 : front + 1, null);
+        if (size == 0 || oldEl == null) return null;
+        list.set(getFrontIndex(), null);
         frontRearHandler(true, false);
         size--;
         return oldEl;
@@ -95,21 +95,31 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public E removeBack()
     {
-        if (size == 0) return null;
         E oldEl = peekBack();
-        list.set(rear == 0 ? capacityPlusSentinel - 1 : rear - 1, null);
+        if (size == 0 || oldEl == null) return null;
+        list.set(getRearIndex(), null);
         frontRearHandler(false, false);
         size--;
         return oldEl;
     }
 
+    private int getFrontIndex()
+    {
+        return front == 0 ? capacityPlusSentinel - 2 : ((front + 1) % capacityPlusSentinel);
+    }
+
+    private int getRearIndex()
+    {
+        return rear == 1 ? rear + 2 : ((rear + capacityPlusSentinel - 1) % capacityPlusSentinel);
+    }
+
     public E peekFront()
     {
-        return list.get(front == capacityPlusSentinel - 1 ? 0 : front + 1);
+        return list.get(getFrontIndex());
     }
 
     public E peekBack()
     {
-        return list.get(rear == 0 ? capacityPlusSentinel - 1 : rear - 1);
+        return list.get(getRearIndex());
     }
 }
