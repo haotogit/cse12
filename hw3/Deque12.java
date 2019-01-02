@@ -105,12 +105,12 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     private int getFrontIndex()
     {
-        return front == 0 ? capacityPlusSentinel - 2 : ((front + 1) % capacityPlusSentinel);
+        return (front + 1) % capacityPlusSentinel;
     }
 
     private int getRearIndex()
     {
-        return rear == 1 ? rear + 2 : ((rear + capacityPlusSentinel - 1) % capacityPlusSentinel);
+        return (rear + capacityPlusSentinel - 1) % capacityPlusSentinel;
     }
 
     public E peekFront()

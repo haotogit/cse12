@@ -11,11 +11,16 @@ public class Runner {
     {
         elDeque12 = new Deque12<Integer>(10);
         for (int i = 0; i < 10; i++) {
-          elDeque12.addFront(i);
-          System.out.println("holaaFront"+elDeque12.peekFront());
+          elDeque12.addBack(i);
         }
 
+        System.out.println("holaaFront"+elDeque12.peekFront());
         System.out.format("removeFront %d\n", elDeque12.removeFront());
+        System.out.println("holaaFront"+elDeque12.peekFront());
+        System.out.println("holaaBack"+elDeque12.peekBack());
+        System.out.format("removeBack %d\n", elDeque12.removeBack());
+        System.out.println("holaaBack"+elDeque12.peekBack());
+        elDeque12.addBack(9999);
         System.out.println("holaaBack"+elDeque12.peekBack());
         //elDeque12.addFront(111);
         //System.out.println("holaaremoved"+elDeque12.removeBack());
