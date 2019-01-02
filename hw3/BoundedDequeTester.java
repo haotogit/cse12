@@ -106,8 +106,8 @@ public class BoundedDequeTester extends TestCase {
      */
     public void testFullListAddBack()
     {
-        while(intDeque121.addBack(0)) {}
-        assertFalse(intDeque121.addBack(0));
+        while(intDeque121.addBack(1)) {}
+        assertFalse(intDeque121.addBack(1));
     }
 
     /**
@@ -115,26 +115,46 @@ public class BoundedDequeTester extends TestCase {
      * if size == 0. If element is removed and size greater than 0, size--.
      */
     public void testRemoveFront()
-    {}
+    {
+        while(intDeque121.addBack(1)) {}
+        int oldSize = intDeque121.size();
+        assertTrue(intDeque121.removeFront() != null);
+        assertTrue(oldSize - 1 == intDeque121.size());
+    }
 
     /**
      * Remove back element from BoundedDeque return it or return null if
      * size == 0. If element is removed, and size > 0, size--.
      */
     public void testRemoveBack()
-    {}
+    {
+        while(intDeque121.addBack(1)) {}
+        int oldSize = intDeque121.size();
+        assertTrue(intDeque121.removeBack() != null);
+        assertTrue(oldSize - 1 == intDeque121.size());
+    }
 
     /**
      * Returns element at the front of BoundedDeque or null if size == 0.
      * BoundedDeque remains unchanged.
      */
     public void testPeekFront()
-    {}
+    {
+        int newEl = 990;
+        assertTrue(intDeque121.peekFront() == null);
+        intDeque121.addFront(newEl);
+        assertEquals(newEl, (int)intDeque121.peekFront());
+    }
 
     /**
      * Returns element at the rear of BoundedDeque or null if size == 0.
      * BoundedDeque remains unchanged.
      */
     public void testPeekBack()
-    {}
+    {
+        int newEl = 999;
+        assertTrue(intDeque121.peekBack() == null);
+        intDeque121.addBack(newEl);
+        assertEquals(newEl, (int)intDeque121.peekBack());
+    }
 }

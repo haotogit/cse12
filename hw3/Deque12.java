@@ -115,11 +115,13 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public E peekFront()
     {
+        if (size == 0) return null;
         return list.get(getFrontIndex());
     }
 
     public E peekBack()
     {
+        if (size == 0) return null;
         return list.get(getRearIndex());
     }
 }
