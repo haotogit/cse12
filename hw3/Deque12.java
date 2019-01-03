@@ -18,8 +18,6 @@ public class Deque12<E> implements BoundedDeque<E> {
 
     public Deque12(int initialCapacity)
     {
-        // TODO: Need to throw IllegalArgumentException if
-        // initialCapacity < 0
         // +2 because of sentinel front and rear
         capacityPlusSentinel = initialCapacity + 2;
         list = new ArrayList<E>(capacityPlusSentinel);
