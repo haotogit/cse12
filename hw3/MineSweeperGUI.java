@@ -231,16 +231,12 @@ public class MineSweeperGUI extends JFrame implements ActionListener {
 	/** Expose cells from the one clicked using breadth first search */
 	public BoundedQueue<MineCell> exposeCellsBFS( int row, int col )
 	{
-		//return null;
-		// TODO: Remove the line above and uncomment the code below when 
-		// you have developed and tested your Queue12 class. 
-		
-		
 		BoundedQueue<MineCell> toReturn = new Queue12<MineCell>( cells.length*cells[0].length);
 		 
 		BoundedQueue<MineCell> theQ = new Queue12<MineCell>(cells.length*cells[0].length);
 		cells[row][col].setExposed();
 		theQ.enqueue(cells[row][col]);
+
 		while ( theQ.size() > 0 ) {
 			MineCell theCell = theQ.dequeue();
 			toReturn.enqueue( theCell );
@@ -261,10 +257,9 @@ public class MineSweeperGUI extends JFrame implements ActionListener {
 					}
 				}
 			}
-
 		}
+
 		return toReturn; 
-		
 	}
 
 	/** Expose cells from the one clicked using depth first search */

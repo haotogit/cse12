@@ -9,8 +9,9 @@ public class Runner {
 
     public void runn()
     {
-        ArrayList<Integer> intArr = new ArrayList<Integer>(10);
-        intArr.add(8, 8);
+        String s = "English";
+        String y = "abandoned";
+        System.out.println(s.compareTo(y));
         //System.out.format("NUM is %f\n", size);
     }
 }

@@ -153,8 +153,8 @@ public class SortTimer {
 			long runtime = totalTime / reps;
 		 
 			// print the results in a table
-			if (!doPrint)
-				System.out.printf("%3d: %7d words in %7d milliseconds\n", i, perf.maxItems, runtime );
+      if (!doPrint)
+          System.out.printf("%3d: %7d words in %7d milliseconds\n", i, perf.maxItems, runtime );
 			
 			// and increase for the next run
 			numwords += increment;

@@ -2,54 +2,38 @@
 import java.lang.Comparable;
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.reflect.Array;
+
 public class Merge12 implements Sort12
 {
     public  <T extends Comparable<? super T>> void  sort(List<T> list)
     {
         int listSize = list.size();
-        int midPt = 0 + listSize / 2;
+        int mid = (0+listSize+1)/2;
         
         ArrayList<T> mergeList = new ArrayList<T>(listSize);
         ArrayList<T> copyList = new ArrayList<T>(listSize);
-        for (T tempItem : list)
+        for (T item : list)
         {
-            copyList.add(tempItem);
+            copyList.add(item);
         }
 
-        // do left internalmergesort
-        internalMergeSort(copyList, mergeList, 0, midPt-1);
-        // do right internalmergesort
-        internalMergeSort(copyList, mergeList, midPt, listSize-1);
-
-        // do merge
-
-        // copy from mergeList into list 
+        internalMergeSort(copyList, mergeList, 0, listSize-1);
+        for (int i = 0; i < copyList.size(); i++) {
+            list.set(i, copyList.get(i));
+        }
     }
 
     private  <T extends Comparable<? super T>> void 
     internalMergeSort(ArrayList<T> inputArray, ArrayList<T> tempArray,
             int first, int last)
     {
-        int midPtIdx = (first + last + 1) / 2;
-
-        if (last - first > 1)
+        int mid = (first + last + 1) / 2;
+        if (last > first)
         {
-            internalMergeSort(inputArray, tempArray, first, midPtIdx-1);
-            if (last > midPtIdx)
-                internalMergeSort(inputArray, tempArray, midPtIdx, last);
-        }
-        else 
-        {
-            System.out.format("First: %d, Last: %d, midPt: %d\n", first, last, midPtIdx);
-            //T firstItem = inputArray.get(first);
-            //T lastItem = inputArray.get(last);
-            //if (lastItem.compareTo(firstItem) <= 0)
-            //{
-            //    tempArray.add(first, lastItem);
-            //}
-            //else if (inputArray.get(inputArray.size()))
-            //{
-            //}
+            internalMergeSort(inputArray, tempArray, first, mid-1);
+            internalMergeSort(inputArray, tempArray, mid, last);
+            merge(inputArray, tempArray, first, mid, last);
         }
     } // internalMergeSort
 
@@ -57,6 +41,39 @@ public class Merge12 implements Sort12
     merge(ArrayList<T> inputArray, ArrayList<T> tempArray,
             int first, int mid, int last)
     {
+        int left = first;
+        int right = mid;
+
+        while (left < mid && right <= last) {
+            T lefty = inputArray.get(left);
+            T righty = inputArray.get(right);
+
+            if (lefty.compareTo(righty) <= 0) {
+                tempArray.add(lefty);
+                left++;
+            } else {
+                tempArray.add(righty);
+                right++;
+            }
+        }
+
+        // leftovers from left or right
+        if (left < mid) {
+            do {
+                tempArray.add(inputArray.get(left++));
+            } while (left < mid);
+        } else if (right <= last) {
+            do {
+                tempArray.add(inputArray.get(right++));
+            } while (right <= last);
+        }
+
+        int x = 0;
+        while (first <= last) {
+            inputArray.set(first++, tempArray.get(x++));
+        }
+
+        tempArray.clear();
     } // Merge
 }
 // vim:ts=4:sw=4:sw=78
