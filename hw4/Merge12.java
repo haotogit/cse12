@@ -59,13 +59,13 @@ public class Merge12 implements Sort12
 
         // leftovers from left or right
         if (left < mid) {
-            do {
+            while (left < mid) {
                 tempArray.add(inputArray.get(left++));
-            } while (left < mid);
+            }
         } else if (right <= last) {
-            do {
+            while (right <= last) {
                 tempArray.add(inputArray.get(right++));
-            } while (right <= last);
+            }
         }
 
         int x = 0;
