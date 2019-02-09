@@ -9,10 +9,9 @@ public class Merge12 implements Sort12
     public  <T extends Comparable<? super T>> void  sort(List<T> list)
     {
         int listSize = list.size();
-        int mid = (0+listSize+1)/2;
-        
         ArrayList<T> mergeList = new ArrayList<T>(listSize);
         ArrayList<T> copyList = new ArrayList<T>(listSize);
+
         for (T item : list)
         {
             copyList.add(item);
@@ -29,6 +28,7 @@ public class Merge12 implements Sort12
             int first, int last)
     {
         int mid = (first + last + 1) / 2;
+
         if (last > first)
         {
             internalMergeSort(inputArray, tempArray, first, mid-1);
@@ -43,6 +43,7 @@ public class Merge12 implements Sort12
     {
         int left = first;
         int right = mid;
+        int x = 0;
 
         while (left < mid && right <= last) {
             T lefty = inputArray.get(left);
@@ -62,13 +63,12 @@ public class Merge12 implements Sort12
             while (left < mid) {
                 tempArray.add(inputArray.get(left++));
             }
-        } else if (right <= last) {
+        } else {
             while (right <= last) {
                 tempArray.add(inputArray.get(right++));
             }
         }
 
-        int x = 0;
         while (first <= last) {
             inputArray.set(first++, tempArray.get(x++));
         }
