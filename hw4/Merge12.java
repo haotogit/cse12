@@ -13,14 +13,11 @@ public class Merge12 implements Sort12
         ArrayList<T> copyList = new ArrayList<T>(listSize);
 
         for (T item : list)
-        {
             copyList.add(item);
-        }
 
         internalMergeSort(copyList, mergeList, 0, listSize-1);
-        for (int i = 0; i < copyList.size(); i++) {
+        for (int i = 0; i < copyList.size(); i++)
             list.set(i, copyList.get(i));
-        }
     }
 
     private  <T extends Comparable<? super T>> void 
@@ -29,6 +26,7 @@ public class Merge12 implements Sort12
     {
         int mid = (first + last + 1) / 2;
 
+        // if more than 1 element in range
         if (last > first)
         {
             internalMergeSort(inputArray, tempArray, first, mid-1);
@@ -45,33 +43,36 @@ public class Merge12 implements Sort12
         int right = mid;
         int x = 0;
 
-        while (left < mid && right <= last) {
+        while (left < mid && right <= last) 
+        {
             T lefty = inputArray.get(left);
             T righty = inputArray.get(right);
 
             if (lefty.compareTo(righty) <= 0) {
                 tempArray.add(lefty);
                 left++;
-            } else {
+            } 
+            else 
+            {
                 tempArray.add(righty);
                 right++;
             }
         }
 
         // leftovers from left or right
-        if (left < mid) {
-            while (left < mid) {
+        if (left < mid) 
+        {
+            while (left < mid) 
                 tempArray.add(inputArray.get(left++));
-            }
-        } else {
-            while (right <= last) {
+        } 
+        else 
+        {
+            while (right <= last) 
                 tempArray.add(inputArray.get(right++));
-            }
         }
 
-        while (first <= last) {
+        while (first <= last) 
             inputArray.set(first++, tempArray.get(x++));
-        }
 
         tempArray.clear();
     } // Merge

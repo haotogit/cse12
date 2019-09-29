@@ -138,7 +138,7 @@ public class SortTimer {
 					sorter = new Merge12(); 
 				}
 				else if ( sortAlg == QUICK ) { 
-					sorter = new Quick12(); 
+					sorter = new MyQuick12(); 
 				}
 				else {
 					throw new IllegalArgumentException( "Cannot instantiate sorter ");
