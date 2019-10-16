@@ -42,8 +42,8 @@ public class CounterTest extends TestCase {
 		System.out.println("Checking Reset");
     counter.reset();
     counter2.reset();
-    assertEquals(1, counter.getCount());
-    assertEquals(1, counter2.getCount());
+    assertEquals(0, counter.getCount());
+    assertEquals(0, counter2.getCount());
 		/* TODO: write a test the verifies Reset */
 	}
 
