@@ -39,6 +39,7 @@ public class Heap12<E extends Comparable <? super E>> extends
     // cursor starts at 1 because of sentinel mode
     private int cursor = 1;
     private boolean isMinHeep = true;
+    private Node oldTop;
     protected class Node
     {
         E data;
@@ -134,8 +135,39 @@ public class Heap12<E extends Comparable <? super E>> extends
 	*/
 	public E poll()
 	{
-		return (E) null;  // TODO: return the correct top of heap
+        if (this.size == 0) return null;
+        this.oldTop = this.heapArray.remove(1);
+        this.heapArray.add(1, this.heapArray.remove(--this.size));
+        System.out.printf("Removed>>>>%d and now new first %d\n", oldTop.data, this.heapArray.get(1).data);
+        this.printTree();
+        this.trickleDown(1);
+		return this.oldTop.data;
 	}
+
+    /**
+     * 
+     *
+     */
+    public void trickleDown(int starter)
+    {
+        if (starter >= this.size-1) return;
+        System.out.printf("Trinckling down from >>> %d\n", starter);
+        Node currNode = this.heapArray.get(starter);
+        // compare against the lesser of children
+        int lesserChildIdx = this.getLesserChilleIdx(starter);
+        Node lesserChild = this.heapArray.get(lesserChildIdx);
+        // do it for minHeap|maxHeap
+        if (currNode.data.compareTo(lesserChild.data) <= 0) return;
+        this.swap(starter, lesserChildIdx);
+        this.trickleDown(lesserChildIdx);
+    }
+
+    public int getLesserChilleIdx(int idx)
+    {
+        Node l = this.heapArray.get(2*idx);
+        Node r = this.heapArray.get(2*idx+1);
+        return l.data.compareTo(r.data) >= 0 ? (2*idx+1) : (2*idx); 
+    }
 
     public void doubleSize ()
     {
@@ -143,8 +175,8 @@ public class Heap12<E extends Comparable <? super E>> extends
         this.heapArray = new ArrayList<Node>(this.heapArray);
         this.heapArray.ensureCapacity((this.heapArray.size()*2)+1);
         this.maxSize = this.maxSize*2;
-        System.out.println("doubledarray====");
     }
+
 	/** 
 	 * insert an element in the heap
      * insert new el at rightmost leaf, size++, bubbleup:
@@ -169,7 +201,7 @@ public class Heap12<E extends Comparable <? super E>> extends
         Node newNode = new Node(el);
         this.heapArray.add(newNode);
         this.size++;
-        this.heepIt(this.size);
+        this.bubbler(this.size);
         this.printTree();
 
         return true;
@@ -182,7 +214,7 @@ public class Heap12<E extends Comparable <? super E>> extends
      * 1. structural property - heap is a complete binary tree
      * 2. ordering property - heap is either minheap(child <= parent) or maxheap(parent >= child)
      */
-    public void heepIt (int pos)
+    public void bubbler (int pos)
     {
         if (pos <= 1) return;
         Node currNode = this.heapArray.get(pos);
@@ -202,8 +234,8 @@ public class Heap12<E extends Comparable <? super E>> extends
         // if it got down here it means there needs to be a swap;
         System.out.printf("swapping %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
         this.swap(pos, papaPos);
-        // continue to heepIt until currNode == root which should be index = 1
-        this.heepIt(papaPos);
+        // continue to bubbler until currNode == root which should be index = 1
+        this.bubbler(papaPos);
     }
 
     public int getPapaPos (int currNodePos)
@@ -214,16 +246,16 @@ public class Heap12<E extends Comparable <? super E>> extends
     public void swap(int from, int to)
     {
         Node temp = this.heapArray.get(to);
-        this.heapArray.set(to, this.heapArray.get(from));
+        Node fromEl = this.heapArray.get(from);
+        this.heapArray.set(to, fromEl);
         this.heapArray.set(from, temp);
+        System.out.printf("** UPDATE %d=%d, %d=%d\n", to, fromEl.data, from, temp.data);
+        this.printTree();
     }
 
     public void printTree()
     {
-        int lvl = 0;
         int idx = 1;
-        int height = 1;
-        int perLvl;
         System.out.println(">>>>>");
         while (idx <= this.size) {
             System.out.printf("#%d >>>>> %d\n", idx, this.heapArray.get(idx++).data);

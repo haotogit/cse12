@@ -7,6 +7,7 @@ public class Runner {
         {
             heapArr.offer(nums[i++]);
         }
-        heapArr.printTree();
+
+        heapArr.poll();
     }
 }
