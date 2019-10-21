@@ -36,7 +36,8 @@ public class Heap12<E extends Comparable <? super E>> extends
     private ArrayList<Node> heapArray;
     private int size;
     private int maxSize = 5;
-    private int cursor;
+    // cursor starts at 1 because of sentinel mode
+    private int cursor = 1;
     private boolean isMinHeep = true;
     protected class Node
     {
@@ -60,7 +61,7 @@ public class Heap12<E extends Comparable <? super E>> extends
  	 */ 
 	public Heap12()
 	{
-        this(false);
+        this(true);
 	}
 
 	/** 
@@ -70,7 +71,9 @@ public class Heap12<E extends Comparable <? super E>> extends
  	 */ 
 	public Heap12( boolean isMaxHeap)
 	{
-        this.heapArray = new ArrayList<Node>(5);
+        this.heapArray = new ArrayList<Node>(5+1);
+        //sentinel
+        this.heapArray.add(null);
         this.isMinHeep = isMaxHeap;
 	}
 
@@ -82,7 +85,8 @@ public class Heap12<E extends Comparable <? super E>> extends
  	 */ 
 	public Heap12( int capacity, boolean isMaxHeap)
 	{
-        this.heapArray = new ArrayList<Node>(capacity);
+        capacity++;
+        this.heapArray = new ArrayList<Node>(capacity+1);
         this.isMinHeep = isMaxHeap;
         this.maxSize = capacity;
 	}
@@ -135,13 +139,16 @@ public class Heap12<E extends Comparable <? super E>> extends
 
     public void doubleSize ()
     {
+        ArrayList<Node> temp = this.heapArray;
         this.heapArray = new ArrayList<Node>(this.heapArray);
-        this.heapArray.ensureCapacity(this.heapArray.size()*2);
+        this.heapArray.ensureCapacity((this.heapArray.size()*2)+1);
         this.maxSize = this.maxSize*2;
-        System.out.printf("doublenewSizeArrayList==== %d\n", this.heapArray.size());
+        System.out.println("doubledarray====");
     }
 	/** 
 	 * insert an element in the heap
+     * insert new el at rightmost leaf, size++, bubbleup:
+     * if node is root return
 	 * @return true
 	 * @throws ClassCastException 
 	 * 	if the class of the element prevents it from being added
@@ -158,17 +165,70 @@ public class Heap12<E extends Comparable <? super E>> extends
         // how am i supposed to copy from that Heap object if list is private?
         // TODO 
         if (this.size == this.maxSize) this.doubleSize();
+        System.out.printf("adding %d>>>\n", el);
         Node newNode = new Node(el);
         this.heapArray.add(newNode);
         this.size++;
-        //this.heepIt();
-        System.out.printf("newSizeArrayList==== %d\n", this.heapArray.size());
+        this.heepIt(this.size);
+        this.printTree();
 
         return true;
 	}
 
-
     /* ------ Private Helper Methods ----
+     *
+    /** 
+     * check heep, ensure it's still heep by verifying:
+     * 1. structural property - heap is a complete binary tree
+     * 2. ordering property - heap is either minheap(child <= parent) or maxheap(parent >= child)
+     */
+    public void heepIt (int pos)
+    {
+        if (pos <= 1) return;
+        Node currNode = this.heapArray.get(pos);
+        int papaPos = this.getPapaPos(pos);
+        Node papaNode = this.heapArray.get(papaPos);
+        System.out.printf("comparing %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+        if (this.isMinHeep) {
+            // if minHeap and current node >= parent node ok
+            if (currNode.data.compareTo(papaNode.data) >= 0) {
+                System.out.printf("%d:%d >= %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+                return;
+            }
+        }
+        else {
+            if (currNode.data.compareTo(papaNode.data) <= 0) return;
+        }
+        // if it got down here it means there needs to be a swap;
+        System.out.printf("swapping %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+        this.swap(pos, papaPos);
+        // continue to heepIt until currNode == root which should be index = 1
+        this.heepIt(papaPos);
+    }
+
+    public int getPapaPos (int currNodePos)
+    {
+        return currNodePos/2;
+    }
+
+    public void swap(int from, int to)
+    {
+        Node temp = this.heapArray.get(to);
+        this.heapArray.set(to, this.heapArray.get(from));
+        this.heapArray.set(from, temp);
+    }
+
+    public void printTree()
+    {
+        int lvl = 0;
+        int idx = 1;
+        int height = 1;
+        int perLvl;
+        System.out.println(">>>>>");
+        while (idx <= this.size) {
+            System.out.printf("#%d >>>>> %d\n", idx, this.heapArray.get(idx++).data);
+        }
+    }
 
     /** Inner Class for an Iterator 
 	This is a recommended class name. You may change it**/
