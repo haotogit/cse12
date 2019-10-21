@@ -8,6 +8,6 @@ public class Runner {
             heapArr.offer(nums[i++]);
         }
 
-        heapArr.poll();
+        heapArr.remove(0);
     }
 }

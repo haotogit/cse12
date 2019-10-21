@@ -99,7 +99,6 @@ public class Heap12<E extends Comparable <? super E>> extends
         this.heapArray.ensureCapacity(toCopy.size()*2); 
 	}
  	 */
-	
 
 	/* The following are defined "stub" methods that provide degenerate
 	 * implementations of methods defined as abstract in parent classes.
@@ -114,6 +113,14 @@ public class Heap12<E extends Comparable <? super E>> extends
 		return this.size;
 	}
 
+    public void doubleSize ()
+    {
+        ArrayList<Node> temp = this.heapArray;
+        this.heapArray = new ArrayList<Node>(this.heapArray);
+        this.heapArray.ensureCapacity((this.heapArray.size()*2)+1);
+        this.maxSize = this.maxSize*2;
+    }
+
 	/** 
  	 * @return an Iterator for the heap 
 	*/
@@ -127,7 +134,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 	*/
 	public E peek()
 	{
-		return (E) null;  // TODO: return the correct top of heap
+		return this.heapArray.get(1).data;
 	}
 	/** 
  	 * @return Element at top of heap. And remove it from the heap. 
@@ -143,39 +150,6 @@ public class Heap12<E extends Comparable <? super E>> extends
         this.trickleDown(1);
 		return this.oldTop.data;
 	}
-
-    /**
-     * 
-     *
-     */
-    public void trickleDown(int starter)
-    {
-        if (starter >= this.size-1) return;
-        System.out.printf("Trinckling down from >>> %d\n", starter);
-        Node currNode = this.heapArray.get(starter);
-        // compare against the lesser of children
-        int lesserChildIdx = this.getLesserChilleIdx(starter);
-        Node lesserChild = this.heapArray.get(lesserChildIdx);
-        // do it for minHeap|maxHeap
-        if (currNode.data.compareTo(lesserChild.data) <= 0) return;
-        this.swap(starter, lesserChildIdx);
-        this.trickleDown(lesserChildIdx);
-    }
-
-    public int getLesserChilleIdx(int idx)
-    {
-        Node l = this.heapArray.get(2*idx);
-        Node r = this.heapArray.get(2*idx+1);
-        return l.data.compareTo(r.data) >= 0 ? (2*idx+1) : (2*idx); 
-    }
-
-    public void doubleSize ()
-    {
-        ArrayList<Node> temp = this.heapArray;
-        this.heapArray = new ArrayList<Node>(this.heapArray);
-        this.heapArray.ensureCapacity((this.heapArray.size()*2)+1);
-        this.maxSize = this.maxSize*2;
-    }
 
 	/** 
 	 * insert an element in the heap
@@ -207,6 +181,55 @@ public class Heap12<E extends Comparable <? super E>> extends
         return true;
 	}
 
+    public void remove (int idx)
+    {
+        // this is if remove is requested as base 0
+        if (++idx > this.size) return;
+        this.heapArray.remove(idx);
+        this.heapArray.add(idx, this.heapArray.remove(--this.size));
+        System.out.printf("Removed >>>>> idx %d\n", idx);
+        this.printTree();
+        this.heepIt(idx);
+    }
+
+    public void heepIt (int initPos)
+    {
+        if (initPos < 1 || initPos >= this.size) return;
+        if (this.bubbler(initPos)) {
+            System.out.println("bubble bubble...");
+        } else {
+            System.out.println("trickle...");
+            this.trickleDown(initPos);
+        };
+    }
+
+    public int getLesserChilleIdx(int idx)
+    {
+        Node l = this.heapArray.get(2*idx);
+        Node r = this.heapArray.get(2*idx+1);
+        return l.data.compareTo(r.data) >= 0 ? (2*idx+1) : (2*idx); 
+    }
+    /**
+     * 
+     *
+     */
+    public boolean trickleDown(int starter)
+    {
+        boolean didSwap = false;
+        // i feel like there's a quicker way to say im at the last level
+        // but how to tell from idx that reached last depth ? TODO
+        if (starter >= this.size) return didSwap;
+        System.out.printf("Trinckling down from >>> %d\n", starter);
+        Node currNode = this.heapArray.get(starter);
+        // compare against the lesser of children
+        int lesserChildIdx = this.getLesserChilleIdx(starter);
+        Node lesserChild = this.heapArray.get(lesserChildIdx);
+        // do it for minHeap|maxHeap
+        if (currNode.data.compareTo(lesserChild.data) <= 0) return didSwap;
+        this.swap(starter, lesserChildIdx);
+        return this.trickleDown(lesserChildIdx);
+    }
+
     /* ------ Private Helper Methods ----
      *
     /** 
@@ -214,28 +237,28 @@ public class Heap12<E extends Comparable <? super E>> extends
      * 1. structural property - heap is a complete binary tree
      * 2. ordering property - heap is either minheap(child <= parent) or maxheap(parent >= child)
      */
-    public void bubbler (int pos)
+    public boolean bubbler (int pos)
     {
-        if (pos <= 1) return;
+        boolean didSwap = false;
+        if (pos <= 1) return didSwap;
         Node currNode = this.heapArray.get(pos);
         int papaPos = this.getPapaPos(pos);
         Node papaNode = this.heapArray.get(papaPos);
-        System.out.printf("comparing %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+        System.out.printf("bubbles: comparing %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
         if (this.isMinHeep) {
             // if minHeap and current node >= parent node ok
             if (currNode.data.compareTo(papaNode.data) >= 0) {
                 System.out.printf("%d:%d >= %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
-                return;
+                return didSwap;
             }
         }
         else {
-            if (currNode.data.compareTo(papaNode.data) <= 0) return;
+            if (currNode.data.compareTo(papaNode.data) <= 0) return didSwap;
         }
-        // if it got down here it means there needs to be a swap;
-        System.out.printf("swapping %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+        didSwap = true;
         this.swap(pos, papaPos);
         // continue to bubbler until currNode == root which should be index = 1
-        this.bubbler(papaPos);
+        return this.bubbler(papaPos);
     }
 
     public int getPapaPos (int currNodePos)
