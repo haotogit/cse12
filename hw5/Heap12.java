@@ -51,6 +51,7 @@ public class Heap12<E extends Comparable <? super E>> extends
         Node rightChild;
         //parent (i-1)/2
         // or i/2 if array root at 1
+        Node papaNode;
 
         public Node(E val) {
             this.data = val;
@@ -74,7 +75,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 	{
         this.heapArray = new ArrayList<Node>(5+1);
         //sentinel
-        this.heapArray.add(null);
+        this.heapArray.add(new Node(null));
         this.isMinHeep = isMaxHeap;
 	}
 
@@ -116,6 +117,7 @@ public class Heap12<E extends Comparable <? super E>> extends
     public void doubleSize ()
     {
         ArrayList<Node> temp = this.heapArray;
+        // I don't know if this is right ???
         this.heapArray = new ArrayList<Node>(this.heapArray);
         this.heapArray.ensureCapacity((this.heapArray.size()*2)+1);
         this.maxSize = this.maxSize*2;
@@ -171,21 +173,34 @@ public class Heap12<E extends Comparable <? super E>> extends
         // how am i supposed to copy from that Heap object if list is private?
         // TODO 
         if (this.size == this.maxSize) this.doubleSize();
-        System.out.printf("adding %d>>>\n", el);
+        System.out.printf(">>>>>>>>>>>>>>>>>>>>adding %d\n", el);
         Node newNode = new Node(el);
+
         this.heapArray.add(newNode);
         this.size++;
         this.bubbler(this.size);
-        this.printTree();
-
         return true;
 	}
+
+    public void getFamiliar(int idx)
+    {
+        Node currNode = this.heapArray.get(idx);
+        currNode.papaNode = idx <= 1 ? null : this.heapArray.get(this.getPapaPos(idx));
+        currNode.leftChild = this.size < 2*idx ? null : this.heapArray.get(2*idx);
+        currNode.rightChild = this.size < 2*idx+1 ? null : this.heapArray.get(2*idx+1);
+        //E papa = currNode.papaNode == null ? null : currNode.papaNode.data;
+        //E lefty = currNode.leftChild == null ? null : currNode.leftChild.data;
+        //E righty = currNode.rightChild == null ? null : currNode.rightChild.data;
+        //System.out.println("...familiarizing>>>"+idx+"; left="+lefty+"; right="+righty+"; pop="+papa);
+    }
 
     public void remove (int idx)
     {
         // this is if remove is requested as base 0
         if (++idx > this.size) return;
+        Node currNode = this.heapArray.get(idx);
         this.heapArray.remove(idx);
+        // TODO only do this if middle of the tree
         this.heapArray.add(idx, this.heapArray.remove(--this.size));
         System.out.printf("Removed >>>>> idx %d\n", idx);
         this.printTree();
@@ -211,6 +226,7 @@ public class Heap12<E extends Comparable <? super E>> extends
     }
     /**
      * 
+     * can probably fruther abstract this and bubbler
      *
      */
     public boolean trickleDown(int starter)
@@ -235,26 +251,30 @@ public class Heap12<E extends Comparable <? super E>> extends
     /** 
      * check heep, ensure it's still heep by verifying:
      * 1. structural property - heap is a complete binary tree
-     * 2. ordering property - heap is either minheap(child <= parent) or maxheap(parent >= child)
+     * 2. ordering property - heap is either minheap(parent <= children) or maxheap(parent >= child)
      */
     public boolean bubbler (int pos)
     {
-        boolean didSwap = false;
-        if (pos <= 1) return didSwap;
-        Node currNode = this.heapArray.get(pos);
         int papaPos = this.getPapaPos(pos);
-        Node papaNode = this.heapArray.get(papaPos);
-        System.out.printf("bubbles: comparing %d:%d vs %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+        boolean didSwap = false;
+        this.getFamiliar(pos);
+        if (pos <= 1) return didSwap;
+        this.getFamiliar(papaPos);
+        Node currNode = this.heapArray.get(pos);
+        System.out.printf("======comparing %d:%d vs %d:%d\n", pos, currNode.data, papaPos, currNode.papaNode.data);
+
         if (this.isMinHeep) {
             // if minHeap and current node >= parent node ok
-            if (currNode.data.compareTo(papaNode.data) >= 0) {
-                System.out.printf("%d:%d >= %d:%d\n", pos, currNode.data, papaPos, papaNode.data);
+            if (currNode.data.compareTo(currNode.papaNode.data) >= 0) {
+                System.out.printf("%d:%d >= %d:%d\n", pos, currNode.data, this.getPapaPos(pos), currNode.papaNode.data);
                 return didSwap;
             }
         }
         else {
-            if (currNode.data.compareTo(papaNode.data) <= 0) return didSwap;
+            return didSwap;
+            //if (currNode.data.compareTo(papaNode.data) <= 0) return didSwap;
         }
+
         didSwap = true;
         this.swap(pos, papaPos);
         // continue to bubbler until currNode == root which should be index = 1
@@ -272,6 +292,24 @@ public class Heap12<E extends Comparable <? super E>> extends
         Node fromEl = this.heapArray.get(from);
         this.heapArray.set(to, fromEl);
         this.heapArray.set(from, temp);
+        this.getFamiliar(from);
+        // update parent with new child
+        int papaPos = this.getPapaPos(from);
+        Node papaNode = this.heapArray.get(papaPos); 
+        this.getFamiliar(papaPos);
+        if (papaNode.leftChild != null)
+            this.getFamiliar(2*papaPos);
+        if (papaNode.rightChild != null)
+            this.getFamiliar(2*papaPos+1);
+
+        int pops = this.getPapaPos(to);
+        Node popsNode = this.heapArray.get(pops);
+        this.getFamiliar(to);
+        this.getFamiliar(pops);
+        if (popsNode.leftChild != null)
+            this.getFamiliar(2*pops);
+        if (popsNode.rightChild != null)
+            this.getFamiliar(2*pops+1);
         System.out.printf("** UPDATE %d=%d, %d=%d\n", to, fromEl.data, from, temp.data);
         this.printTree();
     }
@@ -279,9 +317,16 @@ public class Heap12<E extends Comparable <? super E>> extends
     public void printTree()
     {
         int idx = 1;
-        System.out.println(">>>>>");
+        System.out.println("====================");
         while (idx <= this.size) {
-            System.out.printf("#%d >>>>> %d\n", idx, this.heapArray.get(idx++).data);
+            Node currNode = this.heapArray.get(idx);
+            E papa = currNode.papaNode == null ? null : currNode.papaNode.data;
+            E lefty = currNode.leftChild == null ? null : currNode.leftChild.data;
+            E righty = currNode.rightChild == null ? null : currNode.rightChild.data;
+            //System.out.printf("#%d >>>>> %d, pops=%s\n", idx, currNode.data, currNode.papaNode.data);
+            //System.out.println(idx+" - "+currNode.data+"; papa="+currNode.papaNode.data+"; left="+currNode.leftChild.data+"; right="+currNode.rightChild.data);
+            System.out.println(currNode.data+"; papa="+papa+"; left="+lefty+"; right="+righty);
+            idx++;
         }
     }
 
