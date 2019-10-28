@@ -148,7 +148,7 @@ public class Heap12<E extends Comparable <? super E>> extends
         this.oldTop = this.heapArray.remove(1);
         this.heapArray.add(1, this.heapArray.remove(--this.size));
         System.out.printf("Removed>>>>%d and now new first %d\n", oldTop.data, this.heapArray.get(1).data);
-        this.printTree();
+        //this.printTree();
         this.trickleDown(1);
 		return this.oldTop.data;
 	}
@@ -184,14 +184,38 @@ public class Heap12<E extends Comparable <? super E>> extends
 
     public void getFamiliar(int idx)
     {
+        Node lNut;
+        Node rNut;
         Node currNode = this.heapArray.get(idx);
-        currNode.papaNode = idx <= 1 ? null : this.heapArray.get(this.getPapaPos(idx));
+        Node papaNode;
+        int papaPos = this.getPapaPos(idx);
+        currNode.papaNode = idx <= 1 ? null : this.heapArray.get(papaPos);
         currNode.leftChild = this.size < 2*idx ? null : this.heapArray.get(2*idx);
         currNode.rightChild = this.size < 2*idx+1 ? null : this.heapArray.get(2*idx+1);
-        //E papa = currNode.papaNode == null ? null : currNode.papaNode.data;
-        //E lefty = currNode.leftChild == null ? null : currNode.leftChild.data;
-        //E righty = currNode.rightChild == null ? null : currNode.rightChild.data;
-        //System.out.println("...familiarizing>>>"+idx+"; left="+lefty+"; right="+righty+"; pop="+papa);
+        if (currNode.leftChild != null) {
+            lNut = this.heapArray.get(2*idx);
+            lNut.papaNode = currNode;
+        }
+
+        if (currNode.rightChild != null) {
+            rNut = this.heapArray.get(2*idx+1);
+            rNut.papaNode = currNode;
+        }
+
+        // update parent
+        papaNode = this.heapArray.get(papaPos); 
+        papaNode.leftChild = this.size < 2*papaPos ? null : this.heapArray.get(2*papaPos);
+        papaNode.rightChild = this.size < 2*papaPos+1 ? null : this.heapArray.get(2*papaPos+1);
+
+        if (papaNode.leftChild != null) {
+            lNut = this.heapArray.get(2*papaPos);
+            lNut.papaNode = papaNode;
+        }
+
+        if (papaNode.rightChild != null) {
+            rNut = this.heapArray.get(2*papaPos+1);
+            rNut.papaNode = papaNode;
+        }
     }
 
     public void remove (int idx)
@@ -200,10 +224,10 @@ public class Heap12<E extends Comparable <? super E>> extends
         if (++idx > this.size) return;
         Node currNode = this.heapArray.get(idx);
         this.heapArray.remove(idx);
-        // TODO only do this if middle of the tree
-        this.heapArray.add(idx, this.heapArray.remove(--this.size));
+        if (currNode.leftChild != null || currNode.rightChild != null) {
+            this.heapArray.add(idx, this.heapArray.remove(--this.size));
+        }
         System.out.printf("Removed >>>>> idx %d\n", idx);
-        this.printTree();
         this.heepIt(idx);
     }
 
@@ -293,25 +317,9 @@ public class Heap12<E extends Comparable <? super E>> extends
         this.heapArray.set(to, fromEl);
         this.heapArray.set(from, temp);
         this.getFamiliar(from);
-        // update parent with new child
-        int papaPos = this.getPapaPos(from);
-        Node papaNode = this.heapArray.get(papaPos); 
-        this.getFamiliar(papaPos);
-        if (papaNode.leftChild != null)
-            this.getFamiliar(2*papaPos);
-        if (papaNode.rightChild != null)
-            this.getFamiliar(2*papaPos+1);
-
-        int pops = this.getPapaPos(to);
-        Node popsNode = this.heapArray.get(pops);
         this.getFamiliar(to);
-        this.getFamiliar(pops);
-        if (popsNode.leftChild != null)
-            this.getFamiliar(2*pops);
-        if (popsNode.rightChild != null)
-            this.getFamiliar(2*pops+1);
         System.out.printf("** UPDATE %d=%d, %d=%d\n", to, fromEl.data, from, temp.data);
-        this.printTree();
+        //this.printTree();
     }
 
     public void printTree()
@@ -330,31 +338,45 @@ public class Heap12<E extends Comparable <? super E>> extends
         }
     }
 
+    public Iterator<E> Heap12Iterator()
+    {
+        return new Heap12Iterator();
+    }
+
     /** Inner Class for an Iterator 
 	This is a recommended class name. You may change it**/
 	private class Heap12Iterator implements Iterator<E>
 	{
-        	private boolean canRemove;
+        private boolean canRemove;
+        private int cursor = 1;
+        private boolean stateChange = false;
 		/* there are several ways to iterate through a heap, 
  		 * the simplest is breadth-first, which is just through
  		 * the indices
  		 */
 	
-        	private Heap12Iterator()
-        	{
-        	}
+        private Heap12Iterator Heap12Iterator()
+        {
+            return new Heap12Iterator();
+        }
 
 		public boolean hasNext()
 		{
-            		return true; // TODO: change this when code is implmented	
+            return this.cursor <= Heap12.this.size;
 		}
 		public E next() throws NoSuchElementException
 		{
-			return (E) null;  // TODO: change this when code is implemented
+            if (this.cursor > Heap12.this.size) throw new NoSuchElementException();
+            this.stateChange = false;
+            return Heap12.this.heapArray.get(this.cursor++).data;
 		}
+
 		public void remove() throws IllegalStateException
 		{
-		}	
+            if (this.stateChange) throw new IllegalStateException();
+            Heap12.this.heapArray.remove(this.cursor--);
+            this.stateChange = true;
+		}
 	}
 } 
 // vim:ts=4:sw=4:tw=78:et
