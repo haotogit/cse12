@@ -26,6 +26,7 @@ public class SortTimer {
 	private static final int INSERTION =  BUBBLE + 1;
 	private static final int MERGE = INSERTION + 1;
 	private static final int QUICK = MERGE + 1;
+	private static final int HEAPSORT = QUICK + 1;
 
 	
 	// set this to true to see some internal counts and status updates
@@ -50,7 +51,7 @@ public class SortTimer {
 		String document = args[idx+0];
 		// Which sort Algorithm
 		int sortAlg = Integer.parseInt(args[idx+1]);
-		if (sortAlg < BUBBLE || sortAlg > QUICK) {
+		if (sortAlg < BUBBLE || sortAlg > HEAPSORT) {
 			System.err.println("Unknown Sort Algorithm" + sortAlg);
 			usage();
 			System.exit(1);
@@ -140,6 +141,9 @@ public class SortTimer {
 				else if ( sortAlg == QUICK ) { 
 					sorter = new MyQuick12(); 
 				}
+        else if (sortAlg == HEAPSORT) {
+            sorter = new HeapSort();
+        }
 				else {
 					throw new IllegalArgumentException( "Cannot instantiate sorter ");
 				}
@@ -242,4 +246,3 @@ public class SortTimer {
 	}
 	
 }
-// vim:ts=4:sw=4:sw=78

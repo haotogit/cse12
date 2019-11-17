@@ -10,7 +10,7 @@ public class MyQuick12 implements Sort12
         ArrayList<T> inputArr = new ArrayList<T>(list.size());
         for (T item : list)
         {
-            System.out.format("adding %s\n", item);
+            //System.out.format("adding %s\n", item);
             inputArr.add(item);
         }
 

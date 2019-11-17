@@ -10,7 +10,8 @@ public class Runner {
             heapArr.offer(nums[i++]);
         }
 
-        //Iterator heap12iterator = heapArr.Heap12Iterator();
+        heapArr.printTree();
+        //Iterator heap12iterator = heapArr.iterator();
 
         //while (heap12iterator.hasNext()) {
         //    System.out.println(">>>>>>"+heap12iterator.next());

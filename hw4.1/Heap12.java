@@ -36,8 +36,7 @@ public class Heap12<E extends Comparable <? super E>> extends
     private ArrayList<Node> heapArray;
     private int size;
     private int maxSize = 5;
-    // cursor starts at 1 because of sentinel mode
-    private int cursor = 1;
+    private int cursor = 0;
     private boolean isMinHeep = true;
     private Node oldTop;
     protected class Node
@@ -71,12 +70,10 @@ public class Heap12<E extends Comparable <? super E>> extends
  	 * @param isMaxHeap 	if true, this is a max-heap, else a min-heap. Initial
 	 * capacity of the heap should be 5.
  	 */ 
-	public Heap12( boolean isMaxHeap)
+	public Heap12(boolean isMinHeep)
 	{
-        this.heapArray = new ArrayList<Node>(5+1);
-        //sentinel
-        this.heapArray.add(new Node(null));
-        this.isMinHeep = isMaxHeap;
+        this.heapArray = new ArrayList<Node>(5);
+        this.isMinHeep = isMinHeep;
 	}
 
 	/** 
@@ -88,7 +85,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 	public Heap12( int capacity, boolean isMaxHeap)
 	{
         capacity++;
-        this.heapArray = new ArrayList<Node>(capacity+1);
+        this.heapArray = new ArrayList<Node>(capacity);
         this.isMinHeep = isMaxHeap;
         this.maxSize = capacity;
 	}
@@ -119,7 +116,7 @@ public class Heap12<E extends Comparable <? super E>> extends
         ArrayList<Node> temp = this.heapArray;
         // I don't know if this is right ???
         this.heapArray = new ArrayList<Node>(this.heapArray);
-        this.heapArray.ensureCapacity((this.heapArray.size()*2)+1);
+        this.heapArray.ensureCapacity((this.heapArray.size()*2));
         this.maxSize = this.maxSize*2;
     }
 
@@ -146,12 +143,32 @@ public class Heap12<E extends Comparable <? super E>> extends
 	{
         if (this.size == 0) return null;
         this.oldTop = this.heapArray.remove(1);
-        this.heapArray.add(1, this.heapArray.remove(--this.size));
-        System.out.printf("Removed>>>>%d and now new first %d\n", oldTop.data, this.heapArray.get(1).data);
-        //this.printTree();
+        //this.heepIt(1);
+        this.size--;
+        if (this.oldTop.leftChild != null || this.oldTop.rightChild != null) {
+            this.heapArray.add(1, this.heapArray.remove(this.size));
+        }
+        System.out.printf("Removed>>>>%s and now new first %s\n", oldTop.data, this.heapArray.get(1).data);
+        //this.trickleDown(1);
         this.trickleDown(1);
+        //this.printTree();
 		return this.oldTop.data;
 	}
+
+    public E remove (int idx)
+    {
+        if (this.size == 0) return null;
+        Node removal = this.heapArray.remove(idx);
+        this.size--;
+        if (removal.leftChild != null || removal.rightChild != null) {
+            Node temp = this.heapArray.remove(this.size);
+            this.heapArray.add(idx, temp);
+            //this.getFamiliar(idx);
+        }
+        System.out.printf("Removed >>>>> idx %d=%s\n", idx, removal.data);
+        this.heepIt(1);
+        return removal.data;
+    }
 
 	/** 
 	 * insert an element in the heap
@@ -162,7 +179,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 	 * 	if the class of the element prevents it from being added
 	 * @throws NullPointerException 
 	 * 	if the specified element is null	
-	 * @throws IllegalArgumentException 
+	 * @throws IllegalArgumentException
 	 * 	if some property of the element keeps it from being added. 
 	 */
 	public boolean offer (E el)
@@ -173,14 +190,32 @@ public class Heap12<E extends Comparable <? super E>> extends
         // how am i supposed to copy from that Heap object if list is private?
         // TODO 
         if (this.size == this.maxSize) this.doubleSize();
-        System.out.printf(">>>>>>>>>>>>>>>>>>>>adding %d\n", el);
+        System.out.printf(">>>>>>>>>>>>>>>>>>>>adding %s\n", el);
         Node newNode = new Node(el);
 
         this.heapArray.add(newNode);
         this.size++;
-        this.bubbler(this.size);
+        this.bubbler(this.size-1);
+        //this.offer(this.size);
+        //optionals java 8
         return true;
+        // stream api list
+        // for(T e : list)
+        // 
 	}
+
+    public boolean add (int idx, E el)
+    {
+        if (el == null) throw new NullPointerException("Can't add null element");
+        if (this.size == this.maxSize) this.doubleSize();
+        System.out.printf("^^adding %s@%d\n", el, idx);
+        Node newNode = new Node(el);
+        this.heapArray.add(idx, newNode);
+        //this.getFamiliar(idx);
+        this.size++;
+        this.printTree();
+        return true;
+    }
 
     public void getFamiliar(int idx)
     {
@@ -218,35 +253,26 @@ public class Heap12<E extends Comparable <? super E>> extends
         }
     }
 
-    public void remove (int idx)
-    {
-        // this is if remove is requested as base 0
-        if (++idx > this.size) return;
-        Node currNode = this.heapArray.get(idx);
-        this.heapArray.remove(idx);
-        if (currNode.leftChild != null || currNode.rightChild != null) {
-            this.heapArray.add(idx, this.heapArray.remove(--this.size));
-        }
-        System.out.printf("Removed >>>>> idx %d\n", idx);
-        this.heepIt(idx);
-    }
+    
 
     public void heepIt (int initPos)
     {
-        if (initPos < 1 || initPos >= this.size) return;
+        if (initPos < 1 || initPos > this.size) return;
         if (this.bubbler(initPos)) {
-            System.out.println("bubble bubble...");
+            System.out.println("...bubble bubble..."+initPos);
         } else {
             System.out.println("trickle...");
             this.trickleDown(initPos);
         };
     }
 
-    public int getLesserChilleIdx(int idx)
+    public int lesserChildIdx(int idx)
     {
-        Node l = this.heapArray.get(2*idx);
-        Node r = this.heapArray.get(2*idx+1);
-        return l.data.compareTo(r.data) >= 0 ? (2*idx+1) : (2*idx); 
+        // if left is greater than right, then return lesser right
+        Node currNode = this.heapArray.get(idx);
+        if (currNode.leftChild != null && currNode.leftChild.data.compareTo(currNode.rightChild.data) >= 0) {
+            return 2*idx+1;
+        } else return 2*idx;
     }
     /**
      * 
@@ -258,16 +284,25 @@ public class Heap12<E extends Comparable <? super E>> extends
         boolean didSwap = false;
         // i feel like there's a quicker way to say im at the last level
         // but how to tell from idx that reached last depth ? TODO
-        if (starter >= this.size) return didSwap;
+        if (starter > this.size) return didSwap;
         System.out.printf("Trinckling down from >>> %d\n", starter);
         Node currNode = this.heapArray.get(starter);
-        // compare against the lesser of children
-        int lesserChildIdx = this.getLesserChilleIdx(starter);
-        Node lesserChild = this.heapArray.get(lesserChildIdx);
+        // compare against child
+        int currChildIdx = this.lesserChildIdx(starter);
+        if (currChildIdx == 0 || currChildIdx > this.size) return didSwap;
+        Node currChild = this.heapArray.get(currChildIdx);
+        System.out.println("currIndex="+starter+"compareChild="+currChildIdx);
         // do it for minHeap|maxHeap
-        if (currNode.data.compareTo(lesserChild.data) <= 0) return didSwap;
-        this.swap(starter, lesserChildIdx);
-        return this.trickleDown(lesserChildIdx);
+        if (this.isMinHeep) {
+            if (currNode.data.compareTo(currChild.data) < 0) return didSwap;
+        } else {
+            // if currRoot is greater than lesser child then dont swap
+            if (currNode.data.compareTo(currChild.data) >= 0) return didSwap;
+        }
+        this.swap(starter, currChildIdx);
+        //this.trickleDown(currChildIdx);
+        this.trickleDown(currChildIdx);
+        return didSwap;
     }
 
     /* ------ Private Helper Methods ----
@@ -281,33 +316,34 @@ public class Heap12<E extends Comparable <? super E>> extends
     {
         int papaPos = this.getPapaPos(pos);
         boolean didSwap = false;
-        this.getFamiliar(pos);
-        if (pos <= 1) return didSwap;
-        this.getFamiliar(papaPos);
+        if (pos == 0) return didSwap;
+        //this.getFamiliar(pos);
+        //this.getFamiliar(papaPos);
         Node currNode = this.heapArray.get(pos);
-        System.out.printf("======comparing %d:%d vs %d:%d\n", pos, currNode.data, papaPos, currNode.papaNode.data);
+        System.out.printf("======comparing@bubbler %d:%s vs %d:%s\n", pos, currNode.data, papaPos, this.heapArray.get(papaPos).data);
 
         if (this.isMinHeep) {
-            // if minHeap and current node >= parent node ok
-            if (currNode.data.compareTo(currNode.papaNode.data) >= 0) {
-                System.out.printf("%d:%d >= %d:%d\n", pos, currNode.data, this.getPapaPos(pos), currNode.papaNode.data);
+            // if minHeap and current node > parent node ok
+            if (currNode.data.compareTo(this.heapArray.get(papaPos).data) > 0) {
+                System.out.println("notswapping==="+didSwap);
                 return didSwap;
             }
         }
         else {
-            return didSwap;
-            //if (currNode.data.compareTo(papaNode.data) <= 0) return didSwap;
+            // if maxHeap and currNode is less than parent
+            if (currNode.data.compareTo(this.heapArray.get(papaPos).data) <= 0) return didSwap;
         }
 
         didSwap = true;
         this.swap(pos, papaPos);
         // continue to bubbler until currNode == root which should be index = 1
-        return this.bubbler(papaPos);
+        this.bubbler(papaPos);
+        return didSwap;
     }
 
     public int getPapaPos (int currNodePos)
     {
-        return currNodePos/2;
+        return (currNodePos-1)/2;
     }
 
     public void swap(int from, int to)
@@ -316,16 +352,16 @@ public class Heap12<E extends Comparable <? super E>> extends
         Node fromEl = this.heapArray.get(from);
         this.heapArray.set(to, fromEl);
         this.heapArray.set(from, temp);
-        this.getFamiliar(from);
-        this.getFamiliar(to);
-        System.out.printf("** UPDATE %d=%d, %d=%d\n", to, fromEl.data, from, temp.data);
+        //this.getFamiliar(from);
+        //this.getFamiliar(to);
+        System.out.printf("** UPDATE %d=%s, %d=%s\n", to, fromEl.data, from, temp.data);
         //this.printTree();
     }
 
     public void printTree()
     {
         int idx = 1;
-        System.out.println("====================");
+        //System.out.println("====================");
         while (idx <= this.size) {
             Node currNode = this.heapArray.get(idx);
             E papa = currNode.papaNode == null ? null : currNode.papaNode.data;
@@ -333,7 +369,7 @@ public class Heap12<E extends Comparable <? super E>> extends
             E righty = currNode.rightChild == null ? null : currNode.rightChild.data;
             //System.out.printf("#%d >>>>> %d, pops=%s\n", idx, currNode.data, currNode.papaNode.data);
             //System.out.println(idx+" - "+currNode.data+"; papa="+currNode.papaNode.data+"; left="+currNode.leftChild.data+"; right="+currNode.rightChild.data);
-            System.out.println(currNode.data+"; papa="+papa+"; left="+lefty+"; right="+righty);
+            System.out.println("#"+idx+"# "+currNode.data+"; papa="+papa+"; left="+lefty+"; right="+righty);
             idx++;
         }
     }
@@ -343,7 +379,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 	private class Heap12Iterator implements Iterator<E>
 	{
         private boolean canRemove;
-        private int cursor = 1;
+        private int cursor = 0;
         private boolean stateChange = false;
 		/* there are several ways to iterate through a heap, 
  		 * the simplest is breadth-first, which is just through
@@ -357,7 +393,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 
 		public boolean hasNext()
 		{
-            return this.cursor <= Heap12.this.size;
+            return this.cursor < Heap12.this.size;
 		}
 		public E next() throws NoSuchElementException
 		{
@@ -366,11 +402,12 @@ public class Heap12<E extends Comparable <? super E>> extends
             return Heap12.this.heapArray.get(this.cursor++).data;
 		}
 
-		public void remove() throws IllegalStateException
+		public E remove(int index) throws IllegalStateException
 		{
             if (this.stateChange) throw new IllegalStateException();
-            Heap12.this.heapArray.remove(this.cursor--);
+            E curr = Heap12.this.remove(1);
             this.stateChange = true;
+            return curr;
 		}
 	}
 } 

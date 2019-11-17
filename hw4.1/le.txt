@@ -1,0 +1,10 @@
+1 abbreviate; papa=null; left=abandons; right=aardvark
+#2# abandons; papa=abbreviate; left=abandoning; right=Christian
+#3# aardvark; papa=abbreviate; left=937; right=Mr
+#4# abandoning; papa=abandons; left=941; right=a
+#5# Christian; papa=abandons; left=938; right=null
+#6# 937; papa=aardvark; left=null; right=null
+#7# Mr; papa=aardvark; left=null; right=null
+#8# 941; papa=abandoning; left=null; right=null
+#9# a; papa=abandoning; left=null; right=null
+#10# 938; papa=Christian; left=null; right=null
