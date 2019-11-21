@@ -209,7 +209,7 @@ public class SortTimer {
             String[] arr = line.split( " " );
             for ( String word : arr ) {
                 word = SortTimer.trimPunctuation(word);
-                //otherUnsorted.add(nwords++, word);
+                //otherUnsorted.add(nwords, word);
                 unsorted.add(nwords++, word);
                 if (DEBUG) {
                     if (nwords %1000 == 0 ) {
@@ -226,6 +226,9 @@ public class SortTimer {
 		// get the start time 
 		start = System.currentTimeMillis();
 		sorter.sort(unsorted);
+    //Object[] sortedCorrect = otherUnsorted.toArray();
+    //Arrays.sort(sortedCorrect);
+    //assertArrayEquals(otherUnsorted, unsorted.toArray());
 		//otherSorter.sort(otherUnsorted);
 		// get the end time 
 		end = System.currentTimeMillis();
@@ -236,7 +239,13 @@ public class SortTimer {
 			Iterator<String> iter = unsorted.iterator();
 			while (iter.hasNext())	
 				System.out.println(iter.next());
+
+      System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      //Iterator<String> iterr = sortedCorrect.iterator();
+			//while (iterr.hasNext())	
+			//	System.out.println(iterr.next());
 		}
+    //System.out.println(">>>>>>>>>"+Arrays.equals(unsorted.toArray(), sortedCorrect));
 			
         //System.out.println(">>>>>>>"+unsorted.equals(otherUnsorted));
 		rdata.maxItems=nwords;

@@ -70,10 +70,10 @@ public class Heap12<E extends Comparable <? super E>> extends
  	 * @param isMaxHeap 	if true, this is a max-heap, else a min-heap. Initial
 	 * capacity of the heap should be 5.
  	 */ 
-	public Heap12(boolean isMinHeep)
+	public Heap12(boolean isMaxHeap)
 	{
         this.heapArray = new ArrayList<Node>(5);
-        this.isMinHeep = isMinHeep;
+        this.isMinHeep = isMaxHeap;
 	}
 
 	/** 
@@ -133,7 +133,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 	*/
 	public E peek()
 	{
-		return this.heapArray.get(1).data;
+		return this.heapArray.get(0).data;
 	}
 	/** 
  	 * @return Element at top of heap. And remove it from the heap. 
@@ -142,16 +142,14 @@ public class Heap12<E extends Comparable <? super E>> extends
 	public E poll()
 	{
         if (this.size == 0) return null;
-        this.oldTop = this.heapArray.remove(1);
-        //this.heepIt(1);
+        this.oldTop = this.heapArray.remove(0);
         this.size--;
-        if (this.oldTop.leftChild != null || this.oldTop.rightChild != null) {
-            this.heapArray.add(1, this.heapArray.remove(this.size));
+        if (this.size > 1) {
+            this.heapArray.add(0, this.heapArray.remove(this.size-1));
         }
-        System.out.printf("Removed>>>>%s and now new first %s\n", oldTop.data, this.heapArray.get(1).data);
-        //this.trickleDown(1);
-        this.trickleDown(1);
-        //this.printTree();
+        if(!this.heapArray.isEmpty()) {
+            this.trickleDown(0);
+        }
 		return this.oldTop.data;
 	}
 
@@ -163,7 +161,6 @@ public class Heap12<E extends Comparable <? super E>> extends
         if (removal.leftChild != null || removal.rightChild != null) {
             Node temp = this.heapArray.remove(this.size);
             this.heapArray.add(idx, temp);
-            //this.getFamiliar(idx);
         }
         System.out.printf("Removed >>>>> idx %d=%s\n", idx, removal.data);
         this.heepIt(1);
@@ -211,7 +208,6 @@ public class Heap12<E extends Comparable <? super E>> extends
         System.out.printf("^^adding %s@%d\n", el, idx);
         Node newNode = new Node(el);
         this.heapArray.add(idx, newNode);
-        //this.getFamiliar(idx);
         this.size++;
         this.printTree();
         return true;
@@ -266,37 +262,63 @@ public class Heap12<E extends Comparable <? super E>> extends
         };
     }
 
+    public int biggerChildIdx(int idx)
+    {
+        // if left is greater than right, then return lesser right
+        Node leftChild = getLeftChild(idx);
+        Node rightChild = getRightChild(idx);
+        if (rightChild != null && leftChild.data.compareTo(rightChild.data) <= 0) {
+            return 2*idx + 2;
+        } else return 2*idx + 1;
+    }
+
     public int lesserChildIdx(int idx)
     {
         // if left is greater than right, then return lesser right
-        Node currNode = this.heapArray.get(idx);
-        if (currNode.leftChild != null && currNode.leftChild.data.compareTo(currNode.rightChild.data) >= 0) {
-            return 2*idx+1;
-        } else return 2*idx;
+        Node leftChild = getLeftChild(idx);
+        Node rightChild = getRightChild(idx);
+        if (rightChild != null && leftChild.data.compareTo(rightChild.data) >= 0) {
+            return 2*idx + 2;
+        } else return 2*idx + 1;
     }
     /**
      * 
      * can probably fruther abstract this and bubbler
      *
      */
+    private Node getLeftChild(int pos) {
+        int i = pos*2 + 1;
+        if(i >= this.size)
+            return null;
+        return heapArray.get(i);
+    }
+
+    private Node getRightChild(int pos) {
+        int i = pos*2 + 2;
+        if(i >= this.size)
+            return null;
+        return heapArray.get(i);
+    }
     public boolean trickleDown(int starter)
     {
         boolean didSwap = false;
         // i feel like there's a quicker way to say im at the last level
         // but how to tell from idx that reached last depth ? TODO
         if (starter > this.size) return didSwap;
-        System.out.printf("Trinckling down from >>> %d\n", starter);
         Node currNode = this.heapArray.get(starter);
+        if(getLeftChild(starter) == null && getRightChild(starter) == null) {
+            return didSwap;
+        }
         // compare against child
-        int currChildIdx = this.lesserChildIdx(starter);
-        if (currChildIdx == 0 || currChildIdx > this.size) return didSwap;
+        int currChildIdx = this.isMinHeep ? this.lesserChildIdx(starter) : this.biggerChildIdx(starter);
+        if (currChildIdx == 0 || currChildIdx >= this.size) return didSwap;
         Node currChild = this.heapArray.get(currChildIdx);
-        System.out.println("currIndex="+starter+"compareChild="+currChildIdx);
+        //System.out.println("currIndex="+starter+"compareChild="+currChildIdx);
         // do it for minHeap|maxHeap
         if (this.isMinHeep) {
             if (currNode.data.compareTo(currChild.data) < 0) return didSwap;
         } else {
-            // if currRoot is greater than lesser child then dont swap
+            // if currRoot is greater than greater child then dont swap
             if (currNode.data.compareTo(currChild.data) >= 0) return didSwap;
         }
         this.swap(starter, currChildIdx);
@@ -317,8 +339,6 @@ public class Heap12<E extends Comparable <? super E>> extends
         int papaPos = this.getPapaPos(pos);
         boolean didSwap = false;
         if (pos == 0) return didSwap;
-        //this.getFamiliar(pos);
-        //this.getFamiliar(papaPos);
         Node currNode = this.heapArray.get(pos);
         System.out.printf("======comparing@bubbler %d:%s vs %d:%s\n", pos, currNode.data, papaPos, this.heapArray.get(papaPos).data);
 
@@ -352,8 +372,6 @@ public class Heap12<E extends Comparable <? super E>> extends
         Node fromEl = this.heapArray.get(from);
         this.heapArray.set(to, fromEl);
         this.heapArray.set(from, temp);
-        //this.getFamiliar(from);
-        //this.getFamiliar(to);
         System.out.printf("** UPDATE %d=%s, %d=%s\n", to, fromEl.data, from, temp.data);
         //this.printTree();
     }
