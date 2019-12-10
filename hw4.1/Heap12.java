@@ -76,10 +76,10 @@ public class Heap12<E extends Comparable <? super E>> extends
  	 * @param isMaxHeap 	if true, this is a max-heap, else a min-heap. Initial
 	 * capacity of the heap should be 5.
  	 */ 
-	public Heap12(boolean isMaxHeap)
+	public Heap12(boolean isMinHeap)
 	{
         this.heapArray = new ArrayList<Node>(5);
-        this.isMinHeep = isMaxHeap;
+        this.isMinHeep = isMinHeap;
 	}
 
 	/** 
@@ -153,7 +153,7 @@ public class Heap12<E extends Comparable <? super E>> extends
 		return this.oldTop.data;
 	}
 
-    public E remove (int idx)
+    public E remove(int idx)
     {
         if (this.size == 0) return null;
         Node removal = this.heapArray.remove(idx);
@@ -161,7 +161,7 @@ public class Heap12<E extends Comparable <? super E>> extends
         if (idx < this.size) {
             this.heapArray.add(idx, this.heapArray.remove(this.size-1));
         }
-        System.out.printf("Removed >>>>> idx %d=%s, and added %d\n", idx, removal.data, this.heapArray.get(idx).data);
+        //System.out.printf("Removed >>>>> idx %d=%s, and added %d\n", idx, removal.data, this.heapArray.get(idx).data);
         return removal.data;
     }
 
@@ -391,18 +391,18 @@ public class Heap12<E extends Comparable <? super E>> extends
 		{
             // TODO if removing from middle... how to handle that.
             if (this.stateChange) throw new IllegalStateException();
-            E curr = Heap12.this.remove(this.cursor-1);
-            System.out.println("removing=================="+curr);
-            Integer heeped = Heap12.this.heepIt(this.cursor-1);
+            E curr = Heap12.this.remove(--this.cursor);
+            System.out.println("removingindex=================="+this.cursor);
+            Integer heeped = Heap12.this.heepIt(this.cursor);
             this.stateChange = true;
 
             // if not null it bubbled up
             // therefore cursor stays at next;
-            if (heeped == null) {
-                this.cursor--;
+            if (heeped != null) {
                 System.out.println("heeped}}}}}}}}}}}}}}}}}}}}}}}} "+heeped);
-            } else {
+                this.cursor++;
                 this.rememberList.add(heeped);
+            } else {
                 // need to visit the newly replaced element
                 // which is now at the current next and need to go
                 // back one.

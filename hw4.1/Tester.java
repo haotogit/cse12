@@ -98,7 +98,8 @@ public class Tester {
     public void testIterator()
     {
         Heap12<Integer> heap = new Heap12<>();
-        List<Integer> integers = Arrays.asList(5, 32, 38, 29, 31, 6, 15, 22, 20, 8, 21, 2, 9, 17, 11, 24, 14, 0);
+        List<Integer> integers = Arrays.asList(5, 32, 38, 29, 31, 6, 15, 22, 20,
+            8, 21, 2, 9, 17, 11, 24, 14, 0);
         integers.forEach(heap::offer);
 
         Heap12.Heap12Iterator iter = heap.iterator();
@@ -121,19 +122,24 @@ public class Tester {
         ArrayList<Integer> removedList = new ArrayList<Integer>();
         integers.forEach(heap::offer);
 
-        System.out.println("<<<<<<<<<>>>>>>>>>");
+        System.out.println("<<<<<<<<<                                >>>>>>>>>");
         int i = 0;
-        int j = 0;
+        int diff = 0;
         Heap12.Heap12Iterator iter = heap.iterator();
         while (iter.hasNext()) {
-            iter.next();
+            Comparable curr = iter.next();
             if ((i < 9) && i % 2 == 0) {
                 iter.remove();
-                j++;
+                diff++;
             }
-            removedList.add(i++);
+
+            if (!removedList.contains(curr)) {
+                removedList.add((Integer)curr);
+            }
+
+            i++;
         }
 
-        assertEquals(removedList.size(), heap.size()+j);
+        assertEquals(removedList.size(), heap.size()+diff);
     }
 }
