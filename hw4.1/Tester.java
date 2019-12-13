@@ -66,19 +66,14 @@ public class Tester {
     {
         Heap12<Integer> heap = new Heap12<>(false);
         List<Integer> integers = Arrays.asList(20, 5, 84, 2, 1, -1, 55, 3, 24, 0, 9);
+        Object[] sortedCorrectly = integers.toArray();
+        Arrays.sort(sortedCorrectly);
         integers.forEach(heap::offer);
 
-        assertEquals(84, heap.poll().intValue());
-        assertEquals(55, heap.poll().intValue());
-        assertEquals(24, heap.poll().intValue());
-        assertEquals(20, heap.poll().intValue());
-        assertEquals(9, heap.poll().intValue());
-        assertEquals(5, heap.poll().intValue());
-        assertEquals(3, heap.poll().intValue());
-        assertEquals(2, heap.poll().intValue());
-        assertEquals(1, heap.poll().intValue());
-        assertEquals(0, heap.poll().intValue());
-        assertEquals(-1, heap.poll().intValue());
+        int counter = heap.size()-1;
+        while (heap.size() > 0) {
+            assertEquals(sortedCorrectly[counter--], heap.poll().intValue());
+        }
         assertTrue(heap.size() == 0);
     }
 
@@ -89,7 +84,6 @@ public class Tester {
         ArrayList<Integer> heapSorted = new ArrayList<>(integers);
         Object[] sortedCorrectly = integers.toArray();
         Arrays.sort(sortedCorrectly);
-
         new HeapSort().sort(heapSorted);
         assertArrayEquals(sortedCorrectly, heapSorted.toArray());
     }
@@ -142,4 +136,7 @@ public class Tester {
 
         assertEquals(removedList.size(), heap.size()+diff);
     }
+
+    //TODO
+    // test bubbler
 }

@@ -396,16 +396,15 @@ public class Heap12<E extends Comparable <? super E>> extends
             Integer heeped = Heap12.this.heepIt(this.cursor);
             this.stateChange = true;
 
-            // if not null it bubbled up
+            // if not null it bubbled up and already enumerated previous
+            // indexes
             // therefore cursor stays at next;
             if (heeped != null) {
                 System.out.println("heeped}}}}}}}}}}}}}}}}}}}}}}}} "+heeped);
                 this.cursor++;
                 this.rememberList.add(heeped);
             } else {
-                // need to visit the newly replaced element
-                // which is now at the current next and need to go
-                // back one.
+                // if trickle down or no movement stay at same spot
             }
 		}
 
