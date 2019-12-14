@@ -42,7 +42,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
     public boolean add(E el)
     {
         if (el == null) throw new NullPointerException("Can't add null element");
-        if (this.contains(el)) {
+        if (this.size > 0 && this.contains(el)) {
             return false;
         }
 
@@ -92,13 +92,19 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         return true;
     }
 
-    public void traverseDFS(Node thisRoot)
+    public boolean findTraverseDFS(Node thisRoot, E target)
     {
         // In order traversal
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
-        if (temp.left != null) traverseDFS(temp.left);
-        System.out.println(">>>> "+temp.data+" papa>>"+(temp.papa == null ? null : temp.papa.data)+" left>>"+(temp.left == null ? null : temp.left.data)+"right>>"+(temp.right == null ? null : temp.right.data));
-        if (temp.right != null) traverseDFS(temp.right);
+        int compareResult = temp.data.compareTo(target);
+        if (compareResult == 0) {
+            //System.out.println("BINGOOOOOOOOOO"+temp.data+"======"+temp.data+" target=="+target+"... returning"+compareResult);
+            return compareResult == 0;
+        }
+
+        if (temp.left != null && compareResult > 0) return findTraverseDFS(temp.left, target);
+        else if (temp.right != null && compareResult < 0) return findTraverseDFS(temp.right, target);
+        return false;
     }
 
     public ArrayList<E> traverseBFS()
@@ -111,7 +117,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         whereTo.add(tempNode);
         while(whereTo.size() > 0) {
             tempNode = whereTo.poll();
-            System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
+            //System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
             list.add(tempNode.data);
             if (tempNode.left != null) {
                 whereTo.offer(tempNode.left);
@@ -149,7 +155,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
     public boolean contains(E o)
     {
-        return false;
+        return this.findTraverseDFS(null, o);
     }
 
     public E first()
