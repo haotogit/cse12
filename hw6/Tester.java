@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 public class Tester
 {
-
     @Test
     public void testAdd()
     {
@@ -17,6 +16,7 @@ public class Tester
             currObj = nums.get(i);
             tree.add(currObj);
             assertTrue(tree.size() == i+1); 
+            // TODO how to to test verifyBST
             assertTrue(tree.verifyBST(null));
         }
     }

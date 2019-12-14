@@ -48,7 +48,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
         this.currRoot = this.addToTree(null, this.currRoot, el);
         this.size++;
-        return true;
+        return this.verifyBST(null);
     }
 
     private Node addToTree(Node parent, Node currNode, E currVal)
@@ -92,12 +92,34 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         return true;
     }
 
-    public void printTree(Node thisRoot)
+    public void traverseDFS(Node thisRoot)
     {
+        // In order traversal
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
+        if (temp.left != null) traverseDFS(temp.left);
         System.out.println(">>>> "+temp.data+" papa>>"+(temp.papa == null ? null : temp.papa.data)+" left>>"+(temp.left == null ? null : temp.left.data)+"right>>"+(temp.right == null ? null : temp.right.data));
-        if (temp.left != null) printTree(temp.left);
-        if (temp.right != null) printTree(temp.right);
+        if (temp.right != null) traverseDFS(temp.right);
+    }
+
+    public ArrayList<E> traverseBFS()
+    {
+        Queue<Node> whereTo = new LinkedList<Node>();
+        Node tempNode = this.currRoot;
+        ArrayList<E> list = new ArrayList<E>();
+
+        // visit currnode
+        whereTo.add(tempNode);
+        while(whereTo.size() > 0) {
+            tempNode = whereTo.poll();
+            System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
+            list.add(tempNode.data);
+            if (tempNode.left != null) {
+                whereTo.offer(tempNode.left);
+            }
+            if (tempNode.right != null) whereTo.offer(tempNode.right);
+        }
+
+        return list;
     }
 
     public int numChildren(E target)
