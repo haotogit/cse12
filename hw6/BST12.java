@@ -1,6 +1,19 @@
 import java.util.*;
 import java.util.Iterator;
 
+/**
+ *  Binary Search tree invariants
+ *  - Structural: it's a binary tree
+ *  - Ordering property: for any node x in the tree, all data elements
+ *    on left of x are less than x.data, and all data elements to right
+ *    of x are greater than x.data
+ * - A full binary tree of height h has 2^h - 1 nodes
+ * - The height of a full binary tree with n nodes is log2 (n+1),
+ *   this is also the longest path in a full binary tree
+ * - The height of a binary tree with n nodes is at least log2 (n+1)
+ *   and at most n (this "worst case" occurs when no node has more than 1 child)
+ */
+
 public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<E>
 {
     protected class Node
@@ -24,11 +37,67 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
     }
 
     int size;
-    Node root;
+    Node currRoot;
 
-    public boolean add(E e)
+    public boolean add(E el)
     {
+        if (el == null) throw new NullPointerException("Can't add null element");
+        if (this.contains(el)) {
+            return false;
+        }
+
+        this.currRoot = this.addToTree(null, this.currRoot, el);
+        this.size++;
         return true;
+    }
+
+    private Node addToTree(Node parent, Node currNode, E currVal)
+    {
+        // if reached an empty, null node
+        if (currNode == null) {
+            currNode = new Node(currVal);
+            if (parent != null) {
+                currNode.papa = parent;
+            }
+        } else {
+            // traversing,
+            // and comparing currNode to value to add
+            int compareResult = currVal.compareTo(currNode.data);
+
+            // if greater right
+            if (compareResult > 0) {
+                currNode.right = this.addToTree(currNode, currNode.right, currVal);
+            // else if less left 
+            } else if (compareResult < 0) {
+                currNode.left = this.addToTree(currNode, currNode.left, currVal);
+            }
+        }
+
+        return currNode;
+    }
+
+    public boolean verifyBST(Node thisRoot)
+    {
+        Node temp = thisRoot == null ? this.currRoot : thisRoot;
+
+        // leftChild > currData || rightChild < currData == bad bst
+        if ((temp.left != null && temp.left.data.compareTo(temp.data) > 0) ||
+            (temp.right != null && temp.right.data.compareTo(temp.data) < 0)) {
+            return false;
+        }
+
+        if (temp.left != null) verifyBST(temp.left);
+        if (temp.right != null) verifyBST(temp.right);
+
+        return true;
+    }
+
+    public void printTree(Node thisRoot)
+    {
+        Node temp = thisRoot == null ? this.currRoot : thisRoot;
+        System.out.println(">>>> "+temp.data+" papa>>"+(temp.papa == null ? null : temp.papa.data)+" left>>"+(temp.left == null ? null : temp.left.data)+"right>>"+(temp.right == null ? null : temp.right.data));
+        if (temp.left != null) printTree(temp.left);
+        if (temp.right != null) printTree(temp.right);
     }
 
     public int numChildren(E target)
@@ -43,7 +112,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
     public int size()
     {
-        return 0;
+        return this.size;
     }
 
     public boolean addAll(Collection<? extends E> c)
@@ -58,7 +127,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
     public boolean contains(E o)
     {
-        return true;
+        return false;
     }
 
     public E first()

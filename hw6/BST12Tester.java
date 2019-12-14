@@ -126,6 +126,5 @@ public class BST12Tester {
 		stringTree.remove("C");
 		assertFalse(stringTree.contains("C"));
 	}
-	
 }
 // vim:ts=4:sw=4:sw=78
