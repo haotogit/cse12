@@ -21,4 +21,4 @@ public interface BinSearchTree12<E>
 	public int height();
 	public int numChildren(E target);
 }
-
+// vim:ts=4:sw=4:sw=78

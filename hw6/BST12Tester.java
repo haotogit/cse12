@@ -128,3 +128,4 @@ public class BST12Tester {
 	}
 	
 }
+// vim:ts=4:sw=4:sw=78
