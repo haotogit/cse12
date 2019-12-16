@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 public class Tester
 {
-    //@Test
+    @Test
     public void testAdd()
     {
         BST12<Integer> tree = new BST12<Integer>();
@@ -21,7 +21,7 @@ public class Tester
         }
     }
 
-    //@Test
+    @Test
     public void testContains()
     {
         BST12<Integer> tree = new BST12<Integer>();
@@ -40,7 +40,7 @@ public class Tester
         assertFalse(tree.contains(-65));
     }
 
-    //@Test
+    @Test
     public void testGetNode()
     {
         BST12<Integer> tree = new BST12<Integer>();
@@ -58,7 +58,7 @@ public class Tester
         assertEquals(15, val1);
     }
 
-    //@Test
+    @Test
     public void testGetLeafNode()
     {
         BST12<Integer> tree = new BST12<Integer>();
@@ -88,14 +88,9 @@ public class Tester
         }
 
         assertEquals(tree.size(), nums.size());
-        tree.traverseDFS(null);
         tree.remove(65);
         assertEquals(tree.size(), nums.size()-1);
-        System.out.println(">>>>>>>>>>>>>>>>");
-        tree.traverseDFS(null);
         tree.remove(10);
-        System.out.println(">>>>>>>>>>>>>>>>>         <<<<<<<<<<<<<<<<<<<<<<<<<");
-        tree.traverseDFS(null);
         assertEquals(tree.size(), nums.size()-2);
     }
 }

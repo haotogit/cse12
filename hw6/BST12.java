@@ -94,7 +94,6 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
     private boolean findTraverseDFS(Node thisRoot, E target)
     {
-        // In order traversal
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
         int compareResult = temp.data.compareTo(target);
         if (compareResult == 0) {
@@ -111,7 +110,6 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
     {
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
 
-        System.out.println("BINGOOOOOOOOOO==="+temp.data+"papa=="+(temp.papa != null ? temp.papa.data : "null")+"left======"+(temp.left == null ? "null" : temp.left.data)+"right====="+(temp.right == null ? "null" : temp.right.data));
         if (temp.left != null) traverseDFS(temp.left);
         if (temp.right != null) traverseDFS(temp.right);
         return false;
@@ -121,7 +119,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
     {
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
         int compareResult = temp.data.compareTo(target);
-        System.out.println("comparing: "+(temp.data)+" vs. "+target+" = "+compareResult);
+        //System.out.println("comparing: "+(temp.data)+" vs. "+target+" = "+compareResult);
         //nodePrinter(temp);
         if (compareResult == 0) {
             //System.out.println("BINGOOOOOOOOOO"+temp.data+"======"+temp.data+" target=="+target+"... returning"+compareResult);
@@ -129,12 +127,9 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         }
 
         if (temp.left != null && compareResult > 0) {
-            System.out.println("goingleft>>>>>>"+temp.left.data);
             return getNode(temp.left, target);
         }
         else if (temp.right != null && compareResult < 0) {
-            System.out.println("goingrightdata>>>>>"+temp.data+"the====="+temp.right.data);
-            System.out.println("goingright>>>>>"+temp.right.data);
             return getNode(temp.right, target);
         }
         return null;
@@ -167,7 +162,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         whereTo.add(tempNode);
         while(whereTo.size() > 0) {
             tempNode = whereTo.poll();
-            System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
+            //System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
             list.add(tempNode.data);
             if (tempNode.left != null) {
                 whereTo.offer(tempNode.left);
@@ -185,7 +180,6 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         if (o == null || currNode == null || !this.contains(o)) return false;
 
         // check if internal or leaf
-        System.out.println(">>>>>>>>>>"+currNode.data);
         // if leaf node
         if (currNode.left == null && currNode.right == null) {
             if (currNode.papa.left != null &&
@@ -199,11 +193,8 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
                 this.size--;
                 return true;
             }
-        } else if (currNode.left != null && currNode.data.compareTo(o) <= 0) {
-            // get leafnode
-            System.out.println("currnode======"+currNode.data);
-            leaf = this.getLeafNode(currNode.left);
-            System.out.println("leafNode======"+leaf.data+"papa==="+leaf.papa.data);
+        } else {
+            leaf = this.getLeafNode(currNode.left != null ? currNode.left : currNode.right);
             papaNode = this.getNode(null, leaf.papa.data);
             currNode.data = leaf.data;
 
@@ -211,7 +202,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
             left = currNode.left != null ? currNode.left : null;
             right = currNode.right != null ? currNode.right : null;
             // get lesser
-            if (right == null || left.data.compareTo(right.data) < 0) {
+            if (right == null || (left != null && left.data.compareTo(right.data) < 0)) {
                 if (left.data.compareTo(currNode.data) > 0) {
                     currNode.right = left;
                     currNode.left = right;
@@ -222,8 +213,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
                     currNode.right = left;
                 }
             }
-            
-            System.out.println("papaNode======"+papaNode);
+
             if (papaNode.left != null) {
                 papaNode.left = null;
             } else {
@@ -232,19 +222,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
             this.size--;
             return true;
-        } else if (currNode.right != null && currNode.data.compareTo(o) >= 0) {
-            leaf = this.getLeafNode(currNode.right);
-            papaNode = this.getNode(currNode, leaf.papa.data);
-            currNode.data = leaf.data;
-            if (leaf.data.compareTo(papaNode.left.data) == 0) {
-                papaNode.left = null;
-            } else {
-                papaNode.right = null;
-            }
-
-            this.size--;
-            return true;
-        } 
+        }
 
         return false;
     }
@@ -293,6 +271,30 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
     public E last()
     {
         return (E)null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        String returnStr = "[";
+        Stack<Node> stack = new Stack<Node>();
+        Node temp = this.currRoot;
+        stack.push(temp);
+        while(!stack.isEmpty()) {
+            while (temp.left != null) {
+                temp = temp.left;
+                if (!returnStr.contains(temp.data.toString())) stack.push(temp);
+            }
+
+            temp = stack.pop();
+            returnStr += returnStr.length() > 1 ? ", "+temp.data : temp.data;
+            if (temp.right != null) {
+                temp = temp.right;
+                if (!returnStr.contains(temp.data.toString())) stack.push(temp);
+            }
+        }
+
+        return returnStr+"]";
     }
 
     public Iterator<E> iterator()
