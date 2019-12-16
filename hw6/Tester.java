@@ -87,11 +87,18 @@ public class Tester
             tree.add(currObj);
         }
 
+        tree.traverseBFS();
+        System.out.println("==========");
+        tree.traverseDFS(null);
         assertEquals(tree.size(), nums.size());
-        tree.remove(65);
+        tree.remove(5);
+        System.out.println("==========");
         assertEquals(tree.size(), nums.size()-1);
-        tree.remove(10);
-        assertEquals(tree.size(), nums.size()-2);
+        tree.traverseBFS();
+        System.out.println("==========");
+        tree.traverseDFS(null);
+        //tree.remove(10);
+        //assertEquals(tree.size(), nums.size()-2);
     }
 }
 // vim:ts=4:sw=4:sw=78

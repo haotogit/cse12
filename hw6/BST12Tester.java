@@ -9,7 +9,7 @@ public class BST12Tester {
 
 	private BST12<Integer> tree = new BST12<Integer>();
 
-	@Test
+	//@Test
 	public void testEmptyTree() {
 		tree.clear();
 		assertEquals(0, tree.size());
@@ -28,49 +28,49 @@ public class BST12Tester {
 		tree.add(1);
 	}
 
-	@Test
+	//@Test
 	public void testAddUnique() {
 		for (int n = 1; n <= 6; n++) {
 			assertTrue(tree.contains(n));
 		}
 	}
 
-	@Test
+	//@Test
 	public void testSize() {
 		assertEquals(6, tree.size());
 	}
 
-	@Test
+	//@Test
 	public void testDepth() {
 		assertEquals(4, tree.height());
 	}
 
-	@Test
+	//@Test
 	public void testToString() {
 		assertEquals("[1, 2, 3, 4, 5, 6]", tree.toString());
 	}
 
-	@Test
+	//@Test
 	public void testAddDuplicates() {
 		for (int n = 1; n <= 6; n += 2)
 			assertFalse(tree.add(n));
 	}
 
-	@Test
+	//@Test
 	public void testRemoveExistingLeaf() {
 		assertTrue(tree.remove(1));
 		assertEquals(5, tree.size());
 		assertEquals("[2, 3, 4, 5, 6]", tree.toString());
 	}
 
-	@Test
+	//@Test
 	public void testRemoveExistingMiddleItemWithEmptyRightChild() {
 		assertTrue(tree.remove(4));
 		assertEquals(5, tree.size());
 		assertEquals("[1, 2, 3, 5, 6]", tree.toString());
 	}
 
-	@Test
+	//@Test
 	public void testRemoveExistingMiddleItemWithEmptyLeftChild() {
 		tree.add(7);
 		assertTrue(tree.remove(6));
@@ -78,7 +78,7 @@ public class BST12Tester {
 		assertEquals("[1, 2, 3, 4, 5, 7]", tree.toString());
 	}
 
-	@Test
+	//@Test
 	public void testRemoveExistingMiddleItemWithTwoChildren() {
 		assertTrue(tree.remove(2));
 		assertEquals(5, tree.size());
@@ -87,12 +87,17 @@ public class BST12Tester {
 
 	@Test
 	public void testRemoveRoot() {
+        tree.traverseBFS();
+        System.out.println("==========");
 		assertTrue(tree.remove(5));
+        tree.traverseBFS();
+        System.out.println("==========");
 		assertEquals(5, tree.size());
+        tree.traverseDFS(null);
 		assertEquals("[1, 2, 3, 4, 6]", tree.toString());
 	}
 
-	@Test
+	//@Test
 	public void testRandomAddAndRemove() {
 		Random rnd = new Random();
 
@@ -113,7 +118,7 @@ public class BST12Tester {
 		}
 	}
 
-	@Test
+	//@Test
 	public void testOtherType(){
 		BST12<String> stringTree = new BST12<String>();
 		stringTree.add("D");

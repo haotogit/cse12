@@ -111,6 +111,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
 
         if (temp.left != null) traverseDFS(temp.left);
+        nodePrinter(temp);
         if (temp.right != null) traverseDFS(temp.right);
         return false;
     }
@@ -162,7 +163,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         whereTo.add(tempNode);
         while(whereTo.size() > 0) {
             tempNode = whereTo.poll();
-            //System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
+            nodePrinter(tempNode);
             list.add(tempNode.data);
             if (tempNode.left != null) {
                 whereTo.offer(tempNode.left);
@@ -203,12 +204,14 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
             right = currNode.right != null ? currNode.right : null;
             // get lesser
             if (right == null || (left != null && left.data.compareTo(right.data) < 0)) {
-                if (left.data.compareTo(currNode.data) > 0) {
+                if (left.data.compareTo(currNode.data) > 0 &&
+                    right.data.compareTo(currNode.data) < 0) {
                     currNode.right = left;
                     currNode.left = right;
                 }
             } else {
-                if (right.data.compareTo(currNode.data) < 0) {
+                if (right.data.compareTo(currNode.data) < 0 &&
+                    left.data.compareTo(currNode.data) > 0) {
                     currNode.left = right;
                     currNode.right = left;
                 }
@@ -276,21 +279,24 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
     @Override
     public String toString()
     {
+        // dfs iterative in order
         String returnStr = "[";
         Stack<Node> stack = new Stack<Node>();
         Node temp = this.currRoot;
-        stack.push(temp);
-        while(!stack.isEmpty()) {
-            while (temp.left != null) {
-                temp = temp.left;
-                if (!returnStr.contains(temp.data.toString())) stack.push(temp);
-            }
+        if (this.size() > 0) {
+            stack.push(temp);
+            while(!stack.isEmpty()) {
+                while (temp.left != null) {
+                    temp = temp.left;
+                    if (!returnStr.contains(temp.data.toString())) stack.push(temp);
+                }
 
-            temp = stack.pop();
-            returnStr += returnStr.length() > 1 ? ", "+temp.data : temp.data;
-            if (temp.right != null) {
-                temp = temp.right;
-                if (!returnStr.contains(temp.data.toString())) stack.push(temp);
+                temp = stack.pop();
+                returnStr += returnStr.length() > 1 ? ", "+temp.data : temp.data;
+                if (temp.right != null) {
+                    temp = temp.right;
+                    if (!returnStr.contains(temp.data.toString())) stack.push(temp);
+                }
             }
         }
 
