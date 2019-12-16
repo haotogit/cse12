@@ -92,7 +92,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         return true;
     }
 
-    public boolean findTraverseDFS(Node thisRoot, E target)
+    private boolean findTraverseDFS(Node thisRoot, E target)
     {
         // In order traversal
         Node temp = thisRoot == null ? this.currRoot : thisRoot;
@@ -107,6 +107,56 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         return false;
     }
 
+    public boolean traverseDFS(Node thisRoot)
+    {
+        Node temp = thisRoot == null ? this.currRoot : thisRoot;
+
+        System.out.println("BINGOOOOOOOOOO==="+temp.data+"papa=="+(temp.papa != null ? temp.papa.data : "null")+"left======"+(temp.left == null ? "null" : temp.left.data)+"right====="+(temp.right == null ? "null" : temp.right.data));
+        if (temp.left != null) traverseDFS(temp.left);
+        if (temp.right != null) traverseDFS(temp.right);
+        return false;
+    }
+
+    public Node getNode(Node thisRoot, E target)
+    {
+        Node temp = thisRoot == null ? this.currRoot : thisRoot;
+        int compareResult = temp.data.compareTo(target);
+        System.out.println("comparing: "+(temp.data)+" vs. "+target+" = "+compareResult);
+        //nodePrinter(temp);
+        if (compareResult == 0) {
+            //System.out.println("BINGOOOOOOOOOO"+temp.data+"======"+temp.data+" target=="+target+"... returning"+compareResult);
+            return temp;
+        }
+
+        if (temp.left != null && compareResult > 0) {
+            System.out.println("goingleft>>>>>>"+temp.left.data);
+            return getNode(temp.left, target);
+        }
+        else if (temp.right != null && compareResult < 0) {
+            System.out.println("goingrightdata>>>>>"+temp.data+"the====="+temp.right.data);
+            System.out.println("goingright>>>>>"+temp.right.data);
+            return getNode(temp.right, target);
+        }
+        return null;
+    }
+
+    public void nodePrinter(Node node)
+    {
+        System.out.println("=="+node.data+"; papa="+(node.papa != null ? node.papa.data : "nopapa")+"; left="+(node.left != null ? node.left.data : "noleft")+"; right="+(node.right != null ? node.right.data : "noright"));
+    }
+
+    public Node getLeafNode(Node thisRoot)
+    {
+        Node temp = thisRoot == null ? this.currRoot : thisRoot;
+        if (temp.left == null && temp.right == null) {
+            return temp;
+        }
+
+        if (temp.left != null) return getLeafNode(temp.left);
+        else if (temp.right != null) return getLeafNode(temp.right);
+        return null;
+    }
+
     public ArrayList<E> traverseBFS()
     {
         Queue<Node> whereTo = new LinkedList<Node>();
@@ -117,7 +167,7 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         whereTo.add(tempNode);
         while(whereTo.size() > 0) {
             tempNode = whereTo.poll();
-            //System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
+            System.out.println(">>>> "+tempNode.data+" papa>>"+(tempNode.papa == null ? null : tempNode.papa.data)+" left>>"+(tempNode.left == null ? null : tempNode.left.data)+"right>>"+(tempNode.right == null ? null : tempNode.right.data));
             list.add(tempNode.data);
             if (tempNode.left != null) {
                 whereTo.offer(tempNode.left);
@@ -126,6 +176,77 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
         }
 
         return list;
+    }
+
+    public boolean remove(E o)
+    {
+        Node currNode = this.getNode(this.currRoot, o);
+        Node leaf, papaNode, left, right;
+        if (o == null || currNode == null || !this.contains(o)) return false;
+
+        // check if internal or leaf
+        System.out.println(">>>>>>>>>>"+currNode.data);
+        // if leaf node
+        if (currNode.left == null && currNode.right == null) {
+            if (currNode.papa.left != null &&
+                currNode.papa.left.data.compareTo(o) == 0) {
+                currNode.papa.left = null;
+                this.size--;
+                return true;
+            } else if (currNode.papa.right != null && 
+                currNode.papa.right.data.compareTo(o) == 0) {
+                currNode.papa.right = null;
+                this.size--;
+                return true;
+            }
+        } else if (currNode.left != null && currNode.data.compareTo(o) <= 0) {
+            // get leafnode
+            System.out.println("currnode======"+currNode.data);
+            leaf = this.getLeafNode(currNode.left);
+            System.out.println("leafNode======"+leaf.data+"papa==="+leaf.papa.data);
+            papaNode = this.getNode(null, leaf.papa.data);
+            currNode.data = leaf.data;
+
+            // verify children
+            left = currNode.left != null ? currNode.left : null;
+            right = currNode.right != null ? currNode.right : null;
+            // get lesser
+            if (right == null || left.data.compareTo(right.data) < 0) {
+                if (left.data.compareTo(currNode.data) > 0) {
+                    currNode.right = left;
+                    currNode.left = right;
+                }
+            } else {
+                if (right.data.compareTo(currNode.data) < 0) {
+                    currNode.left = right;
+                    currNode.right = left;
+                }
+            }
+            
+            System.out.println("papaNode======"+papaNode);
+            if (papaNode.left != null) {
+                papaNode.left = null;
+            } else {
+                papaNode.right = null;
+            }
+
+            this.size--;
+            return true;
+        } else if (currNode.right != null && currNode.data.compareTo(o) >= 0) {
+            leaf = this.getLeafNode(currNode.right);
+            papaNode = this.getNode(currNode, leaf.papa.data);
+            currNode.data = leaf.data;
+            if (leaf.data.compareTo(papaNode.left.data) == 0) {
+                papaNode.left = null;
+            } else {
+                papaNode.right = null;
+            }
+
+            this.size--;
+            return true;
+        } 
+
+        return false;
     }
 
     public int numChildren(E target)
@@ -150,7 +271,8 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
     public void clear()
     {
-        return;
+        this.currRoot = null;
+        this.size = 0;
     }
 
     public boolean contains(E o)
@@ -160,22 +282,17 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
 
     public E first()
     {
-        return (E)null;
+        return this.currRoot.data;
     }
 
     public boolean isEmpty()
     {
-        return true;
+        return this.size == 0;
     }
 
     public E last()
     {
         return (E)null;
-    }
-
-    public boolean remove(E o)
-    {
-        return true;
     }
 
     public Iterator<E> iterator()
