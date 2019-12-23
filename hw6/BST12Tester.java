@@ -16,8 +16,7 @@ public class BST12Tester {
 		assertEquals(0, tree.height());
 		assertEquals("[]", tree.toString());
 	}
-//
-//
+
 	@Before
 	public void setUp() throws Exception {
 		tree.add(5);
@@ -87,10 +86,8 @@ public class BST12Tester {
 
 	@Test
 	public void testRemoveRoot() {
-        tree.traverseBFS();
 		assertTrue(tree.remove(5));
 		assertEquals(5, tree.size());
-        tree.traverseDFS(null);
 		assertEquals("[1, 2, 3, 4, 6]", tree.toString());
 	}
 
