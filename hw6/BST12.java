@@ -202,18 +202,22 @@ public class BST12<E extends Comparable <? super E>> implements BinSearchTree12<
             // verify children
             left = currNode.left != null ? currNode.left : null;
             right = currNode.right != null ? currNode.right : null;
-            // get lesser
-            if (right == null || (left != null && left.data.compareTo(right.data) < 0)) {
+
+            if (left != null && right != null) {
                 if (left.data.compareTo(currNode.data) > 0 &&
-                    right.data.compareTo(currNode.data) < 0) {
+                    (right.data.compareTo(currNode.data) < 0)) {
                     currNode.right = left;
                     currNode.left = right;
                 }
-            } else {
-                if (right.data.compareTo(currNode.data) < 0 &&
-                    left.data.compareTo(currNode.data) > 0) {
-                    currNode.left = right;
+            } else if (left != null && right == null) {
+                if (left.data.compareTo(currNode.data) > 0) {
+                    currNode.left = null;
                     currNode.right = left;
+                }
+            } else if (right != null && left == null) {
+                if (right.data.compareTo(currNode.data) < 0) {
+                    currNode.right = null;
+                    currNode.left = right;
                 }
             }
 
